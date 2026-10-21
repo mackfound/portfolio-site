@@ -2,3 +2,4 @@ node_modules/
 _site/
 drafts/
 .determinism/
+.DS_Store
