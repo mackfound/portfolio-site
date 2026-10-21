@@ -44,7 +44,7 @@ Do not build any of these. If one seems necessary, stop and ask.
 - No CSS framework (Tailwind, Bootstrap, etc.).
 - No analytics script. Traffic data comes from Cloudflare zone-level stats only.
 - No newsletter or email delivery. That is a future, separate, non-professional project.
-- No AI-generated prose anywhere in shipped content (section 7).
+- No AI-generated prose anywhere in shipped content (section 7), except approved meta descriptions (section 7).
 
 ### The "AI website" look — explicitly avoid
 
@@ -212,6 +212,7 @@ links:
   live: https://passagework.us
   source: https://github.com/mackfound/passagework
 summary: TODO-COPY(project-passagework-summary)
+description: …           # optional meta description; falls back to summary
 detail: high-level       # research only: high-level | deep
 pi_signoff: false        # research only
 ```
@@ -278,7 +279,9 @@ draft: false
 
 **Claude Code MAY write:** structural labels only. That covers navigation names, "All writing →", "Past work", date formats, the 404 line, button labels, `aria-label`s on purely structural elements, and the literal commands on `/verify/`.
 
-**Claude Code MUST NOT write:** anything else. That includes the bio, project text, section intros, the positioning line, the verify explainer, meta descriptions, Open Graph descriptions, image alt text, and resume content.
+**Claude Code MUST NOT write:** anything else. That includes the bio, project text, section intros, the positioning line, the verify explainer, image alt text, and resume content.
+
+**Meta descriptions (exception granted in P6):** Claude Code drafts each page's meta (and Open Graph) description from that page's own copy; Michael approves or edits it before commit. Claude Code never drafts one ahead of the page copy it summarizes.
 
 **Placeholder format:** `TODO-COPY(slot-name)`. Slot names are unique and descriptive.
 
@@ -287,7 +290,7 @@ draft: false
 - `deploy.sh` refuses to run if any slot remains.
 - Local dev builds render placeholders visibly, highlighted, so they are easy to find.
 
-**Meta tags:** every page has `<title>`, `<meta name="description">`, and Open Graph title, description, and URL. Descriptions are `TODO-COPY(meta-<page>)`.
+**Meta tags:** every page has `<title>`, `<meta name="description">`, and Open Graph title, description, and URL. Each page sets `description` in its front matter, starting as `TODO-COPY(meta-<page>)`; project and note pages fall back to their `summary` (approved at the P5 gate).
 
 ---
 

@@ -34,6 +34,7 @@ export const SCHEMAS = {
       stack: ["stringList", true],
       links: ["links", false],
       summary: ["string", true],
+      description: ["string", false],
       detail: ["string", false, ["high-level", "deep"]],
       pi_signoff: ["boolean", false],
     },

@@ -1,7 +1,7 @@
 ---
 layout: base.njk
 title: About
-metaSlot: about
+description: TODO-COPY(meta-about)
 blurb: TODO-COPY(home-about-blurb)
 contact: true
 ---

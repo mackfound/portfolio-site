@@ -81,6 +81,14 @@ test("nothing links the notes feed while the notes section is hidden", () => {
   for (const { path, html } of pages) assert.doesNotMatch(html, /notes\/feed\.xml/, path);
 });
 
+test("every page has a meta and Open Graph description", () => {
+  for (const { path, html } of pages) {
+    for (const attr of ['name="description"', 'property="og:description"']) {
+      assert.match(html, new RegExp(`<meta ${attr} content="[^"]+">`), `${path}: empty ${attr}`);
+    }
+  }
+});
+
 test("every img has an alt attribute", () => {
   for (const { path, html } of pages) {
     for (const [tag] of html.matchAll(/<img\b[^>]*>/gi)) {
