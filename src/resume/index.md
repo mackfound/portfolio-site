@@ -47,7 +47,7 @@ Computer Engineering · Minor: Philosophy, Politics, and Economics
 *Creator* · July 2026 – August 2026
 
 - Built and shipped a local-first browser tool (TypeScript, Vite) that loops short passages of a recording with the sheet music on screen, for hands-free instrument practice
-- Designed a gapless loop on the audio thread and a pitch-preserving WSOLA time-stretcher down to 0.5× speed, both running in an AudioWorklet
+- Designed a gapless loop on the audio thread and a pitch-preserving WSOLA time-stretcher down to 0.5× speed
 - Wrote the architecture spec and milestone plan that Claude Code implemented: four layers (pure core, audio, storage, UI) enforced by an import-scanning test, with 93 unit tests
 
 ### Machine Learning for Engineers · Dublin, Ireland – Engineering Study Abroad
