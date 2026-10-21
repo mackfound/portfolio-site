@@ -477,7 +477,7 @@ These are not in launch scope. Each needs its own review.
 ## 15. Open items (Michael)
 
 - [x] Domain name: `mdoyle.dev`.
-- [ ] Resume source content for the HTML resume page. Pending upload: `/resume/` is a generic skeleton until then, and `TODO-COPY(resume-pdf)` blocks deploy until the PDF is committed.
+- [x] Resume source content for the HTML resume page (software/security resume, transcribed in P6). The PDF is still pending a version with mdoyle.dev and Passagework bullets that match the project page; `TODO-COPY(resume-pdf)` blocks deploy until it is committed.
 - [ ] Any projects beyond the three seed entries.
 - [ ] Positioning line for the front page.
 - [x] Cloudflare Pages project name: `mdoyle-v5`.
