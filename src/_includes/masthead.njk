@@ -3,7 +3,7 @@
 {% set front = page.url == "/" %}
 <header class="masthead{% if not front %} masthead--compact{% endif %}">
   {% if front %}<h1 class="masthead__name">{{ site.name }}</h1>{% else %}<p class="masthead__name"><a href="/">{{ site.name }}</a></p>{% endif %}
-  {% if front %}<p class="masthead__standing">TODO-COPY(home-standing)</p>{% endif %}
+  {% if front %}<p class="masthead__standing">Notre Dame · Computer Engineering · 2029</p>{% endif %}
   <p class="dateline">
     <span>Vol. V · No. {{ edition.number }}<span class="dateline__late"> · Late Edition</span></span>
     {% if edition.date %}<time datetime="{{ edition.date }}">{{ edition.date | displayDate }}</time>{% endif %}
