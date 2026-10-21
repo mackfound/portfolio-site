@@ -337,7 +337,7 @@ The signing key lives only on Michael's laptop. A valid signature proves that ev
 4. Put `michael namespaces="mdoyle-site" <public key line>` in the repo's `allowed_signers`, and the fingerprint in `site.json`.
 5. Optionally, register the same key as a GitHub SSH signing key for commits. The namespace keeps site signatures and commit signatures from being interchangeable.
 6. Cloudflare setup:
-   - Create a new Pages project in **Direct Upload** mode. As far as known, it cannot later switch to Git integration; confirm in Cloudflare's docs before creating it.
+   - Create the Pages project from the CLI: `npx wrangler login`, then `npx wrangler pages project create <name> --production-branch main`. This makes an empty **Direct Upload** project and uploads nothing. Never upload through the dashboard: the first upload is `./deploy.sh`. As far as known, a Direct Upload project cannot later switch to Git integration; confirm in Cloudflare's docs before creating it.
    - Attach the custom domain.
    - In the zone, disable every feature that rewrites HTML in transit: email address obfuscation, automatic HTTPS rewrites, Rocket Loader, and Web Analytics auto-injection.
    - `verify-live.js` is the backstop for anything missed.
@@ -421,8 +421,8 @@ Each phase ends with a review gate. Claude Code stops, summarizes what was built
 | **P2 — Edition design** | Typography, masthead, dateline, Late Edition, color tokens, front-page layout, phone and desktop layouts | Screenshots of the front page and one project page at 375px and 1280px, light and dark. **Design review: no further styling until approved** |
 | **P3 — Pages** | Projects index and detail, writing index, about plus contact, resume (HTML structure), verify, 404, RSS | Every launch page renders, and all checks pass apart from copy |
 | **P4 — Signing pipeline** | `manifest.js`, `edition.js`, `verify-live.js`, `deploy.sh`, round-trip tests with a throwaway key | `deploy.sh` dry run (`--dry-run` skips Wrangler and push) succeeds end to end with a test key |
-| **P5 — Infrastructure (manual, Michael)** | Key setup, domain purchase, Cloudflare project, zone settings, `site.json` real values | First signed deploy to the live domain, with `verify-live.js` clean |
-| **P6 — Copy and launch** | Michael fills every `TODO-COPY` slot | Launch checklist (section 13) is complete |
+| **P5 — Infrastructure (manual, Michael)** | Key setup, domain purchase, Cloudflare project, zone settings, `site.json` real values | Infrastructure in place, and `./deploy.sh --dry-run` passes with the real key and the repo's `allowed_signers` |
+| **P6 — Copy and launch** | Michael fills every `TODO-COPY` slot | First signed deploy to the live domain with `verify-live.js` clean, then the launch checklist (section 13) is complete |
 
 ---
 
