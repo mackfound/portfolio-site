@@ -5,5 +5,6 @@ import { existsSync } from "node:fs";
 export default function () {
   return {
     resumePdf: existsSync("src/assets/media/michael-doyle-resume.pdf"),
+    radiohoundPaper: existsSync("src/assets/media/pythonic-hdl-workflows-paper.pdf"),
   };
 }
