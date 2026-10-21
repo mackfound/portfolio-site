@@ -1,0 +1,30 @@
+---
+layout: base.njk
+title: Projects
+permalink: /projects/
+eleventyComputed:
+  metaSlot: projects
+---
+{# Current work grouped as the front page groups it (sections.json), then past work.
+   Group ids match section ids so /projects/#research lands on its group. #}
+{% set groups = [] %}
+{% for section in sections %}{% if section.collection == "projects" %}
+  {% set groups = (groups.push({ id: section.id, label: section.label, collection: "projects", filter: section.filter }), groups) %}
+{% endif %}{% endfor %}
+{% set groups = (groups.push({ id: "past", label: "Past work", collection: "projects", filter: { status: "past" } }), groups) %}
+
+<h1>Projects</h1>
+
+{% for group in groups %}
+{% set entries = collections | sectionEntries(group) %}
+{% if entries.length %}
+<section id="{{ group.id }}" class="section" aria-labelledby="{{ group.id }}-heading">
+  <h2 class="section__head" id="{{ group.id }}-heading">{{ group.label }}</h2>
+  <ul class="entries">
+  {% for entry in entries %}
+    {% include "entry.njk" %}
+  {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endfor %}
