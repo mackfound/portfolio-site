@@ -227,7 +227,7 @@ pi_signoff: false        # research only
 |---|---|---|---|
 | `passagework.md` | project | current | Links and stack as above |
 | `remote-attestation.md` | research | current | DSP lab, high-level only |
-| `radiohound-fpga-workflow.md` | project | past | FPGA dev workflow, Python → synthesizable Verilog, Zynq-7000 validation |
+| `radiohound.md` | project | past | RadioHound: Amaranth HDL (Python → Verilog) in the spring, a spectrum-verification harness in the fall |
 
 ### Writing: `src/writing/*.md`
 
