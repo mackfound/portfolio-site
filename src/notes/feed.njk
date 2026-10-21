@@ -1,0 +1,28 @@
+---
+permalink: /notes/feed.xml
+layout: false
+eleventyExcludeFromCollections: true
+---
+{# Atom feed for Notes (projectplan.md §6). Built at launch but linked from
+   nowhere while the notes section has `show: false`. #}
+{%- set label = "" -%}
+{%- for section in sections %}{% if section.id == "notes" %}{% set label = section.label %}{% endif %}{% endfor -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.name }} · {{ label }}</title>
+  <link href="{{ site.url }}/notes/feed.xml" rel="self"/>
+  <link href="{{ site.url }}/"/>
+  <id>{{ site.url }}/notes/</id>
+  <updated>{{ collections.notes | feedUpdated(edition.date) }}</updated>
+  <author><name>{{ site.name }}</name></author>
+  {%- for note in collections.notes %}
+  <entry>
+    <title>{{ note.data.title }}</title>
+    <link href="{{ site.url }}{{ note.url }}"/>
+    <id>{{ site.url }}{{ note.url }}</id>
+    <updated>{{ note.data.date | dateToRfc3339 }}</updated>
+    <summary>{{ note.data.summary }}</summary>
+    <content type="html">{{ note.content | htmlToAbsoluteUrls(site.url + note.url) }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

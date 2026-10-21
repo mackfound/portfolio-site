@@ -1,5 +1,6 @@
-{# Contact line: email and profile links from site.json. Empty values are skipped. #}
+{# Contact line: email and profile links (src/_data/contactLinks.js). Omitted while empty. #}
+{% if contactLinks.length %}
 <p class="contact">
-  {% if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}
-  {% for name, href in site.links %}{% if href %} · <a href="{{ href }}">{{ name | capitalize }}</a>{% endif %}{% endfor %}
+  {% for item in contactLinks %}{% if not loop.first %} · {% endif %}<a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}
 </p>
+{% endif %}

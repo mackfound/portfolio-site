@@ -1,0 +1,13 @@
+---
+layout: base.njk
+title: Writing
+metaSlot: writing
+permalink: /writing/
+---
+<h1>Writing</h1>
+
+<ul class="entries">
+{% for entry in collections.writing %}
+  {% include "entry.njk" %}
+{% endfor %}
+</ul>

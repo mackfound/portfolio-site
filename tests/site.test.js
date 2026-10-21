@@ -2,9 +2,9 @@
 // origins, and basic accessibility.
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { build, listFiles, tempDir } from "./helpers.js";
+import { ROOT, build, listFiles, tempDir } from "./helpers.js";
 
 let out;
 let pages; // [{ path, html }]
@@ -57,6 +57,28 @@ test("every page sets lang and has exactly one h1", () => {
     assert.match(html, /<html lang="[a-z]{2}/, `${path}: missing lang`);
     assert.equal(html.match(/<h1[\s>]/g)?.length ?? 0, 1, `${path}: needs exactly one h1`);
   }
+});
+
+test("every launch page is built (projectplan.md §13)", () => {
+  const projects = readdirSync(join(ROOT, "src/projects"))
+    .filter((f) => f.endsWith(".md")).map((f) => `projects/${f.slice(0, -3)}/index.html`);
+  const expected = ["index.html", "projects/index.html", ...projects, "writing/index.html",
+    "about/index.html", "resume/index.html", "verify/index.html", "404.html", "notes/feed.xml"];
+  assert.deepEqual(expected.filter((f) => !existsSync(join(out, f))), []);
+});
+
+test("the notes feed is dated from content or the edition, never the build time", () => {
+  const feed = readFileSync(join(out, "notes/feed.xml"), "utf8");
+  const edition = JSON.parse(readFileSync(join(ROOT, "src/_data/edition.json"), "utf8"));
+  assert.match(feed, /^<\?xml version="1.0" encoding="utf-8"\?>\n<feed xmlns="http:\/\/www.w3.org\/2005\/Atom">/);
+  const updated = feed.match(/<updated>([^<]+)<\/updated>/)[1];
+  assert.equal(updated, edition.date ? `${edition.date}T00:00:00Z` : "1970-01-01T00:00:00Z");
+});
+
+test("nothing links the notes feed while the notes section is hidden", () => {
+  const sections = JSON.parse(readFileSync(join(ROOT, "src/_data/sections.json"), "utf8"));
+  if (sections.find((s) => s.id === "notes")?.show) return;
+  for (const { path, html } of pages) assert.doesNotMatch(html, /notes\/feed\.xml/, path);
 });
 
 test("every img has an alt attribute", () => {

@@ -465,7 +465,7 @@ These are not in launch scope. Each needs its own review.
 ## 15. Open items (Michael)
 
 - [ ] Domain name (replace `DOMAIN` everywhere).
-- [ ] Resume source content for the HTML resume page.
+- [ ] Resume source content for the HTML resume page. Pending upload: `/resume/` is a generic skeleton until then, and `TODO-COPY(resume-pdf)` blocks deploy until the PDF is committed.
 - [ ] Any projects beyond the three seed entries.
 - [ ] Positioning line for the front page.
 - [ ] Cloudflare Pages project name.
