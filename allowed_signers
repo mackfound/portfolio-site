@@ -1,3 +1,4 @@
 # Public key for verifying site signatures (projectplan.md §9).
 # Michael adds one line here after the manual key setup:
 # michael namespaces="mdoyle-site" ssh-ed25519 AAAA... mdoyle-site signing
+michael namespaces="mdoyle-site" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHStX1TdJwXWb/Biz1/Tk2CsBPOnx3En6RKrXEa6DPZt mdoyle-site signing
