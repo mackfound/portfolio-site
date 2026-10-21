@@ -102,6 +102,17 @@ test("a signature made under another namespace does not verify", () => {
   }
 });
 
+test("the fingerprint in site.json belongs to the key in allowed_signers", () => {
+  const line = readFileSync(join(ROOT, "allowed_signers"), "utf8").split("\n")
+    .find((l) => l.trim() && !l.startsWith("#"));
+  const { keyFingerprint } = JSON.parse(readFileSync(join(ROOT, "src/_data/site.json"), "utf8"));
+  if (!line && !keyFingerprint) return; // before key setup (P5)
+  assert.ok(line && keyFingerprint, "set both allowed_signers and site.json keyFingerprint, or neither");
+  writeFileSync(join(keys, "repo.pub"), `${line.split(" ").slice(2).join(" ")}\n`);
+  const actual = execFileSync("ssh-keygen", ["-lf", join(keys, "repo.pub")], { encoding: "utf8" }).split(" ")[1];
+  assert.equal(actual.replace(/^SHA256:/, ""), keyFingerprint.replace(/^SHA256:/, ""));
+});
+
 test("verify-live passes against a Pages-like server and catches a changed file", () => {
   const ok = node("scripts/verify-live.js", "--local", site);
   assert.equal(ok.status, 0, ok.stderr);
