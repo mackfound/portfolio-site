@@ -2,7 +2,4 @@
 export default {
   layout: "note.njk",
   permalink: "/notes/{{ page.fileSlug }}/",
-  eleventyComputed: {
-    metaSlot: (data) => `note-${data.page.fileSlug}`,
-  },
 };

@@ -212,6 +212,7 @@ links:
   live: https://passagework.us
   source: https://github.com/mackfound/passagework
 summary: TODO-COPY(project-passagework-summary)
+description: …           # optional meta description; falls back to summary
 detail: high-level       # research only: high-level | deep
 pi_signoff: false        # research only
 ```
@@ -287,7 +288,7 @@ draft: false
 - `deploy.sh` refuses to run if any slot remains.
 - Local dev builds render placeholders visibly, highlighted, so they are easy to find.
 
-**Meta tags:** every page has `<title>`, `<meta name="description">`, and Open Graph title, description, and URL. Descriptions are `TODO-COPY(meta-<page>)`.
+**Meta tags:** every page has `<title>`, `<meta name="description">`, and Open Graph title, description, and URL. Each page sets `description` in its front matter, starting as `TODO-COPY(meta-<page>)`; project and note pages fall back to their `summary` (approved at the P5 gate).
 
 ---
 

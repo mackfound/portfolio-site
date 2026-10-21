@@ -1,7 +1,7 @@
 ---
 layout: base.njk
 title: Verify
-metaSlot: verify
+description: TODO-COPY(meta-verify)
 ---
 {#- Key values fall back to copy slots so deploy refuses until the key exists (P5). -#}
 {%- set fingerprint = site.keyFingerprint or "TODO-COPY(verify-fingerprint)" -%}
