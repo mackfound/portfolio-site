@@ -45,7 +45,7 @@ test("check-content accepts the new section", () => {
 
 test("serve-mode builds preview drafts and highlight slots; others drop drafts", () => {
   writeFileSync(join(repo, "src/notes/draft-note.md"),
-    "---\ntitle: Fixture draft\ndate: 2026-04-01\nsummary: Fixture\ndraft: true\n---\nBody\n");
+    "---\ntitle: Fixture draft\ndate: 2026-04-01\nsummary: Fixture\ndraft: true\n---\nTODO-COPY(fixture-slot)\n");
   const out = tempDir();
   const preview = tempDir();
   try {
@@ -53,8 +53,8 @@ test("serve-mode builds preview drafts and highlight slots; others drop drafts",
     assert.ok(!existsSync(join(out, "notes/draft-note/index.html")), "deployable build drops drafts");
     build(preview, { cwd: repo, runMode: "serve" });
     assert.ok(existsSync(join(preview, "notes/draft-note/index.html")), "serve build previews drafts");
-    assert.match(readFileSync(join(preview, "index.html"), "utf8"),
-      /<mark class="todo-copy">TODO-COPY\(home-positioning\)<\/mark>/, "serve build highlights slots");
+    assert.match(readFileSync(join(preview, "notes/draft-note/index.html"), "utf8"),
+      /<mark class="todo-copy">TODO-COPY\(fixture-slot\)<\/mark>/, "serve build highlights slots");
   } finally {
     rmSync(join(repo, "src/notes/draft-note.md"));
     rmSync(out, { recursive: true, force: true });

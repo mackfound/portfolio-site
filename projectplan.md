@@ -246,7 +246,7 @@ deck: <carry over verbatim from current site>
 
 | Title | Outlet | Date | URL |
 |---|---|---|---|
-| You Should Be Excited to Write | The Observer | 2026-01-29 | https://www.ndsmcobserver.com/article/2026/01/you-should-be-excited-to-write |
+| You Should be Excited to Write | The Observer | 2026-01-29 | https://www.ndsmcobserver.com/article/2026/01/you-should-be-excited-to-write |
 | No Easy Path Upward | The Wall Street Journal | 2026-01-13 | (above) |
 | It's a Terrible Day, Thanks be to God | The Observer | 2025-11-07 | https://www.ndsmcobserver.com/article/2025/11/it-s-a-terrible-day-thanks-be-to-god |
 | What Has 13 Years of Catholic Education Taught Me? | The Observer | 2025-10-03 | https://www.ndsmcobserver.com/article/2025/10/what-has-13-years-of-catholic-education-actually-taught-me |
