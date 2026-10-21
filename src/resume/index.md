@@ -35,7 +35,7 @@ Computer Engineering · Minor: Philosophy, Politics, and Economics
 
 ### Wireless Institute · Notre Dame, IN
 
-*Research Assistant* · January 2026 – Present
+*Research Assistant* · January 2026 – November 2026
 
 - Established an end-to-end FPGA development workflow for the RadioHound SDR project, enabling HDL module authoring in Python and the high-level generation of synthesizable Verilog code; published as an open-source repo and technical paper for incoming undergraduate research assistants
 - Instantiated a Python-generated module into an AMD Vivado project; validated signal output on a Zynq-7000 SoC against a 40 MHz clock using oscilloscope capture and MATLAB waveform reconstruction
