@@ -1,7 +1,7 @@
 ---
 layout: base.njk
 title: Resume
-metaSlot: resume
+description: TODO-COPY(meta-resume)
 ---
 # Resume
 
