@@ -1,14 +1,22 @@
 ---
 layout: base.njk
 title: Verify
-description: TODO-COPY(meta-verify)
+description: "How to check that every page on mdoyle.dev was signed by Michael Doyle's key and arrived unchanged, using OpenSSH and a published manifest."
 ---
 {#- Key values fall back to copy slots so deploy refuses until the key exists (P5). -#}
 {%- set fingerprint = site.keyFingerprint or "TODO-COPY(verify-fingerprint)" -%}
 {%- set signersLine = signing.allowedSigners or "TODO-COPY(verify-allowed-signers)" -%}
 # Verify
 
-TODO-COPY(verify-explainer)
+Every page on this site is signed. When I publish, a script hashes every file the site serves (pages, stylesheets, and fonts) into a manifest, and I sign that manifest with an SSH key that never leaves my laptop. The footer of every page shows the commit it was built from and the key that signed it.
+
+The steps below let you check this yourself: download the manifest and its signature, verify the signature against my public key, then compare a page’s hash with its line in the manifest. A page at `/writing/` is listed as `/writing/index.html`. If the hashes match, the bytes you received are the ones I approved.
+
+Don’t take this page’s word for the key. The same fingerprint is on my GitHub profile, so check that the two agree before trusting either.
+
+What this doesn’t prove: that the site was built from its public source code, or that my laptop wasn’t compromised. It proves that nothing changed between my machine and your browser.
+
+Attestation is my central research focus, so why not apply its core idea, proving rather than asserting, at a micro level on my own site?
 
 ## Signing key
 
