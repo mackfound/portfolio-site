@@ -3,12 +3,17 @@ layout: base.njk
 ---
 <article>
   <h1>{{ title }}</h1>
-  <dl>
+  <dl class="facts">
     <dt>Role</dt><dd>{{ role }}</dd>
     <dt>Period</dt><dd>{{ period }}</dd>
     <dt>Stack</dt><dd>{{ stack | join(", ") }}</dd>
   </dl>
-  {% if links.live %}<p><a href="{{ links.live }}">Live →</a></p>{% endif %}
-  {% if links.source %}<p><a href="{{ links.source }}">Source →</a></p>{% endif %}
+  {% if links.live or links.source %}
+  <p class="project-links">
+    {% if links.live %}<a href="{{ links.live }}">Live →</a>{% endif %}
+    {% if links.live and links.source %} · {% endif %}
+    {% if links.source %}<a href="{{ links.source }}">Source →</a>{% endif %}
+  </p>
+  {% endif %}
   {{ content | safe }}
 </article>

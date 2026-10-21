@@ -67,5 +67,29 @@ test("every img has an alt attribute", () => {
   }
 });
 
-test.todo("contrast tokens meet WCAG AA (P2, once color tokens exist)");
+// Color tokens from site.css: light on :root, dark in the prefers-color-scheme block.
+function tokens(css, block) {
+  return Object.fromEntries([...block.matchAll(/--([a-z-]+):\s*(#[0-9a-f]{6})/gi)].map((m) => [m[1], m[2]]));
+}
+function luminance(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+    .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function contrast(a, b) {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+test("text and link tokens meet WCAG AA (4.5:1) on paper in both themes", () => {
+  const css = readFileSync(join(out, "assets/css/site.css"), "utf8");
+  const light = tokens(css, css.match(/:root\s*\{[^}]*\}/)[0]);
+  const dark = { ...light, ...tokens(css, css.match(/prefers-color-scheme:\s*dark\)\s*\{\s*:root\s*\{[^}]*\}/)[0]) };
+  for (const [theme, t] of [["light", light], ["dark", dark]]) {
+    for (const fg of ["ink", "ink-muted", "accent"]) {
+      const ratio = contrast(t[fg], t.paper);
+      assert.ok(ratio >= 4.5, `${theme}: --${fg} on --paper is ${ratio.toFixed(2)}:1`);
+    }
+  }
+});
 test.todo("manifest round-trip with a throwaway key (P4)");

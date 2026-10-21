@@ -46,9 +46,13 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("pageByUrl", (pages, url) => pages.find((p) => p.url === url));
 
   // Dates are formatted by hand in UTC so output never depends on the build machine.
-  eleventyConfig.addFilter("isoDate", (date) => date.toISOString().slice(0, 10));
-  eleventyConfig.addFilter("displayDate", (date) =>
-    `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`);
+  // Accepts a Date (front matter) or a "YYYY-MM-DD" string (edition.json).
+  const utc = (date) => (date instanceof Date ? date : new Date(`${date}T00:00:00Z`));
+  eleventyConfig.addFilter("isoDate", (date) => utc(date).toISOString().slice(0, 10));
+  eleventyConfig.addFilter("displayDate", (date) => {
+    const d = utc(date);
+    return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+  });
 
   // Local preview highlights remaining copy slots in the body (projectplan.md §7).
   // Run mode is only known once the build starts, so check it per page.
