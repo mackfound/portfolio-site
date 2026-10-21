@@ -44,7 +44,7 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 [ "$dry" = 1 ] || [ -n "$PAGES_PROJECT" ] || fail "PAGES_PROJECT is not set at the top of deploy.sh"
 [ -f "$key" ] || fail "no signing key at $key"
 [ "$(node -v)" = "v$(cat .nvmrc)" ] \
-  || fail "Node is $(node -v); the repo pins v$(cat .nvmrc). Run: nvm install && nvm use"
+  || fail "Node is $(node -v); the repo pins v$(cat .nvmrc) (.nvmrc). Install and switch to it, e.g. nvm install && nvm use, or fnm use --install-if-missing"
 npm ls --depth=0 >/dev/null 2>&1 || fail "dependencies are missing or out of date. Run: npm ci"
 npm test
 node scripts/check-copy.js --strict >/dev/null 2>&1 \
