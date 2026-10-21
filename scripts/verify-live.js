@@ -2,7 +2,7 @@
 // decoded body's SHA-256 to the manifest (projectplan.md §9, step 8). Also checks
 // that the live manifest.txt and manifest.txt.sig match the local ones.
 //
-//   node scripts/verify-live.js                 against site.url (https://DOMAIN)
+//   node scripts/verify-live.js                 against site.url (https://mdoyle.dev)
 //   node scripts/verify-live.js --base URL      against another origin
 //   node scripts/verify-live.js --local _site   against a local Pages-like server (dry run)
 //

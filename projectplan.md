@@ -10,7 +10,7 @@ This document is the spec. Claude Code reads it in full before starting any phas
 - Work phase by phase (section 11). Do not start a phase until the previous phase's review gate is cleared by Michael.
 - Section 12 lists the conditions under which Claude Code **MUST stop and ask** instead of deciding. When in doubt, stop and ask.
 - Michael writes all substantive text (section 7). Claude Code builds structure, not voice.
-- Placeholders use the literal string `DOMAIN` until the domain is purchased.
+- Placeholders used the literal string `DOMAIN` until the domain was purchased; it is now `mdoyle.dev`.
 
 ---
 
@@ -367,7 +367,7 @@ Each step aborts the deploy on failure.
 6. **Verify locally:** `ssh-keygen -Y verify -f allowed_signers -I michael -n mdoyle-site -s _site/manifest.txt.sig < _site/manifest.txt`.
 7. **Deploy:** `npx wrangler pages deploy _site --project-name <name>`.
 8. **Verify live:** `scripts/verify-live.js`.
-   - Fetches every manifest path from `https://DOMAIN` and maps `/x/index.html` → `/x/` and `/index.html` → `/`, following Pages' canonical-URL redirects.
+   - Fetches every manifest path from `https://mdoyle.dev` and maps `/x/index.html` → `/x/` and `/index.html` → `/`, following Pages' canonical-URL redirects.
    - Hashes the decoded body bytes and compares each to the manifest.
    - Exits non-zero with a list of any mismatched URLs.
 9. **Push:** push the commits to GitHub.
@@ -452,7 +452,7 @@ Claude Code **MUST stop and ask** before:
 - [ ] `deploy.sh` completes; `verify-live.js` is clean on every URL.
 - [ ] Manual verification from a second machine following `/verify/` exactly as written succeeds.
 - [ ] HTML-rewriting zone features are confirmed off.
-- [ ] Old site at `mdoyle.pages.dev` updated to point to `https://DOMAIN` (redirect or notice).
+- [ ] Old site at `mdoyle.pages.dev` updated to point to `https://mdoyle.dev` (redirect or notice).
 - [ ] Resume PDF and LinkedIn/GitHub profiles updated to the new domain.
 
 ---
@@ -473,8 +473,8 @@ These are not in launch scope. Each needs its own review.
 
 ## 15. Open items (Michael)
 
-- [ ] Domain name (replace `DOMAIN` everywhere).
+- [x] Domain name: `mdoyle.dev`.
 - [ ] Resume source content for the HTML resume page. Pending upload: `/resume/` is a generic skeleton until then, and `TODO-COPY(resume-pdf)` blocks deploy until the PDF is committed.
 - [ ] Any projects beyond the three seed entries.
 - [ ] Positioning line for the front page.
-- [ ] Cloudflare Pages project name.
+- [x] Cloudflare Pages project name: `mdoyle-v5`.

@@ -11,7 +11,7 @@
 set -eu
 
 # Cloudflare Pages project name (projectplan.md §15). A real deploy refuses while empty.
-PAGES_PROJECT=""
+PAGES_PROJECT="mdoyle-v5"
 
 dry=0
 key="$HOME/.ssh/mdoyle_site"
@@ -43,6 +43,9 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 [ "$branch" = main ] || warn_or_fail "on branch $branch, not main"
 [ "$dry" = 1 ] || [ -n "$PAGES_PROJECT" ] || fail "PAGES_PROJECT is not set at the top of deploy.sh"
 [ -f "$key" ] || fail "no signing key at $key"
+[ "$(node -v)" = "v$(cat .nvmrc)" ] \
+  || fail "Node is $(node -v); the repo pins v$(cat .nvmrc) (.nvmrc). Install and switch to it, e.g. nvm install && nvm use, or fnm use --install-if-missing"
+npm ls --depth=0 >/dev/null 2>&1 || fail "dependencies are missing or out of date. Run: npm ci"
 npm test
 node scripts/check-copy.js --strict >/dev/null 2>&1 \
   || warn_or_fail "TODO-COPY slots remain in src/ (node scripts/check-copy.js lists them)"
