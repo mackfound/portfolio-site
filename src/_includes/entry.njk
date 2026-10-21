@@ -1,0 +1,10 @@
+{# One entry in any list (front page or index page). Expects `entry` in scope. #}
+<li class="entry">
+  <h3 class="entry__title"><a href="{{ entry.data.url or entry.url }}">{{ entry.data.title }}</a></h3>
+  <p class="entry__meta">
+    {% if entry.data.outlet %}{{ entry.data.outlet }} · {% endif %}
+    {% if entry.data.date %}<time datetime="{{ entry.data.date | isoDate }}">{{ entry.data.date | displayDate }}</time>{% elif entry.data.period %}{{ entry.data.period }}{% endif %}
+    {% if entry.data.category %} · {{ entry.data.category }}{% endif %}
+  </p>
+  <p class="entry__summary">{{ entry.data.summary or entry.data.deck }}</p>
+</li>

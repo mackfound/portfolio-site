@@ -4,11 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }} · {% endif %}{{ site.name }}</title>
-  <meta name="description" content="TODO-COPY(meta-{{ metaSlot or 'page' }})">
+  <meta name="description" content="TODO-COPY(meta-{{ metaSlot }})">
   <meta property="og:title" content="{% if title %}{{ title }} · {% endif %}{{ site.name }}">
-  <meta property="og:description" content="TODO-COPY(meta-{{ metaSlot or 'page' }})">
+  <meta property="og:description" content="TODO-COPY(meta-{{ metaSlot }})">
   <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <link rel="preload" href="/assets/fonts/doyle-serif-roman.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  {%- for section in sections %}{% if section.id == "notes" and section.show %}
+  <link rel="alternate" type="application/atom+xml" href="/notes/feed.xml" title="{{ site.name }} · {{ section.label }}">
+  {%- endif %}{% endfor %}
 </head>
 <body>
   {% include "masthead.njk" %}
@@ -17,7 +21,7 @@
     {{ content | safe }}
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <p><a href="/resume/">Resume</a></p>
     <p class="attestation"><a href="/verify/">build {{ build.sha or "…" }} · signed {{ site.keyFingerprint or "…" }} · verify →</a></p>
   </footer>

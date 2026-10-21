@@ -3,6 +3,6 @@ layout: base.njk
 ---
 <article>
   <h1>{{ title }}</h1>
-  <p><time datetime="{{ date }}">{{ date }}</time></p>
+  <p><time datetime="{{ date | isoDate }}">{{ date | displayDate }}</time></p>
   {{ content | safe }}
 </article>

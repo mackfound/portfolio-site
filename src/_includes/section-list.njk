@@ -1,5 +1,20 @@
-{# Generic front-page renderer for one entry of sections.json.
-   Expects `section` in scope. Filtering and entry markup arrive in P1. #}
-<section id="{{ section.id }}">
-  <h2>{{ section.label }}</h2>
+{# Generic front-page renderer for one entry of sections.json (`section` in scope).
+   A `collection` section lists its latest entries; a `page` section shows that
+   page's `blurb` and links to it. #}
+<section id="{{ section.id }}" class="section{% if section.page %} section--page{% endif %}" aria-labelledby="{{ section.id }}-heading">
+  <h2 class="section__head" id="{{ section.id }}-heading">{{ section.label }}</h2>
+{% if section.page %}
+  {% set target = collections.all | pageByUrl(section.page) %}
+  <p>{{ target.data.blurb }}</p>
+  {% if target.data.contact %}{% include "contact.njk" %}{% endif %}
+  <p class="section__more"><a href="{{ section.page }}">More →</a></p>
+{% else %}
+  <ul class="entries">
+  {% for entry in collections | sectionEntries(section) %}
+    {% include "entry.njk" %}
+  {% endfor %}
+  </ul>
+  {% set indexUrl = section | sectionIndexUrl(collections.all) %}
+  {% if indexUrl %}<p class="section__more"><a href="{{ indexUrl }}">All {{ section.label | lower }} →</a></p>{% endif %}
+{% endif %}
 </section>

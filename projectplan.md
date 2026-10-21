@@ -59,7 +59,7 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 **Edition (structure).** The front page is set like a publication of record.
 - **Masthead:** "M. Doyle".
 - **Dateline:** a rule-separated line under the masthead: `Vol. V · No. N` on the left, the edition date on the right.
-- **Late Edition:** in dark mode, the dateline reads "Late Edition". This is CSS-only, using `prefers-color-scheme` and a `::after` or visibility swap. No JavaScript.
+- **Late Edition:** in dark mode, the dateline reads "Late Edition", appended to the left side (`Vol. V · No. N · Late Edition`); the date stays visible. This is CSS-only, using `prefers-color-scheme` and a `::after` or visibility swap. No JavaScript.
 
 **Attested (signature).** Every page footer carries the short source commit SHA, the signing key fingerprint, and a link to `/verify/`. The signing pipeline is specified in section 9.
 
@@ -74,7 +74,7 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 
 ### Front page order
 
-1. Masthead and dateline.
+1. Masthead (left-aligned), standing line `TODO-COPY(home-standing)` with school and year, dateline, and an index strip of section links plus Resume (generated from `sections.json`).
 2. Positioning line: one sentence, `TODO-COPY(home-positioning)`.
 3. Lead stories: projects with `status: current`, `kind: project`, ordered by `order`.
 4. Research: projects with `status: current`, `kind: research`.
@@ -95,6 +95,7 @@ Sections 3–7 render from `sections.json` in configured order. The order above 
 - **Numerals:** tabular figures (`font-variant-numeric: tabular-nums`) for all dates, edition numbers, and hashes.
 - **Monospace:** the system mono stack for hashes and commands.
 - **Font budget:** if the variable font files exceed the font budget (section 8), stop and ask. The likely alternative is static instances (400, 500, 400 italic) plus one display instance for the masthead.
+- **Shipped setup (approved at P2):** the variable roman instanced to wght 400–500 with the full opsz axis, renamed "Doyle Serif" under the OFL Reserved Font Name clause, plus Fontsource's static 400 italic. `scripts/fonts/build-fonts.sh` rebuilds both reproducibly.
 
 ### Color and theme
 
@@ -193,7 +194,7 @@ All dependencies use exact versions with no ranges. Pick versions at least two w
 ]
 ```
 
-- **Adding a section:** create a folder under `src/`, register its collection in `eleventy.config.js` (one line, glob-based), and add one entry here.
+- **Adding a section:** create a folder under `src/` (its entries plus a `<folder>.11tydata.json` setting layout and permalink), and add one entry here. `eleventy.config.js` registers every collection named in this file from `src/<collection>/*.md`, so it needs no edit.
 - **Generic renderer:** `section-list.njk` renders any registered section.
 - **Validation:** `check-content.js` validates this file against a schema.
 
@@ -336,7 +337,7 @@ The signing key lives only on Michael's laptop. A valid signature proves that ev
 4. Put `michael namespaces="mdoyle-site" <public key line>` in the repo's `allowed_signers`, and the fingerprint in `site.json`.
 5. Optionally, register the same key as a GitHub SSH signing key for commits. The namespace keeps site signatures and commit signatures from being interchangeable.
 6. Cloudflare setup:
-   - Create a new Pages project in **Direct Upload** mode. As far as known, it cannot later switch to Git integration; confirm in Cloudflare's docs before creating it.
+   - Create the Pages project from the CLI: `npx wrangler login`, then `npx wrangler pages project create <name> --production-branch main`. This makes an empty **Direct Upload** project and uploads nothing. Never upload through the dashboard: the first upload is `./deploy.sh`. As far as known, a Direct Upload project cannot later switch to Git integration; confirm in Cloudflare's docs before creating it.
    - Attach the custom domain.
    - In the zone, disable every feature that rewrites HTML in transit: email address obfuscation, automatic HTTPS rewrites, Rocket Loader, and Web Analytics auto-injection.
    - `verify-live.js` is the backstop for anything missed.
@@ -370,6 +371,14 @@ Each step aborts the deploy on failure.
    - Hashes the decoded body bytes and compares each to the manifest.
    - Exits non-zero with a list of any mismatched URLs.
 9. **Push:** push the commits to GitHub.
+
+`check-copy.js --strict` also runs on the built site after step 3, because the meta-description slots exist only in output. A real deploy refuses while `PAGES_PROJECT` (top of `deploy.sh`) is empty.
+
+**Dry run** (`npm run deploy:dry-run`, approved at P4): makes a throwaway key and runs `deploy.sh --dry-run --key <tmp> --signers <tmp>`.
+- Not being on `main` and remaining `TODO-COPY` slots are warnings; a dirty tree and a failing `npm test` still abort.
+- `edition.json` is bumped for the build and restored afterwards; nothing is committed.
+- Steps 7 and 9 are skipped.
+- Step 8 runs `verify-live.js --local _site` against a local server that resolves URLs the way Pages does.
 
 ### Footer attestation line
 
@@ -412,8 +421,8 @@ Each phase ends with a review gate. Claude Code stops, summarizes what was built
 | **P2 — Edition design** | Typography, masthead, dateline, Late Edition, color tokens, front-page layout, phone and desktop layouts | Screenshots of the front page and one project page at 375px and 1280px, light and dark. **Design review: no further styling until approved** |
 | **P3 — Pages** | Projects index and detail, writing index, about plus contact, resume (HTML structure), verify, 404, RSS | Every launch page renders, and all checks pass apart from copy |
 | **P4 — Signing pipeline** | `manifest.js`, `edition.js`, `verify-live.js`, `deploy.sh`, round-trip tests with a throwaway key | `deploy.sh` dry run (`--dry-run` skips Wrangler and push) succeeds end to end with a test key |
-| **P5 — Infrastructure (manual, Michael)** | Key setup, domain purchase, Cloudflare project, zone settings, `site.json` real values | First signed deploy to the live domain, with `verify-live.js` clean |
-| **P6 — Copy and launch** | Michael fills every `TODO-COPY` slot | Launch checklist (section 13) is complete |
+| **P5 — Infrastructure (manual, Michael)** | Key setup, domain purchase, Cloudflare project, zone settings, `site.json` real values | Infrastructure in place, and `./deploy.sh --dry-run` passes with the real key and the repo's `allowed_signers` |
+| **P6 — Copy and launch** | Michael fills every `TODO-COPY` slot | First signed deploy to the live domain with `verify-live.js` clean, then the launch checklist (section 13) is complete |
 
 ---
 
@@ -454,6 +463,7 @@ These are not in launch scope. Each needs its own review.
 
 - **Notes:** the first post, then flip `notes.show` to `true`.
 - **In-browser verification:** a Web Crypto "verify this page" button. Expect a budget flag.
+- **Footer verification disclosure:** an info icon on the footer attestation line that opens Michael's explanation, `TODO-COPY(footer-attestation-explainer)`: what the line is, what it does, and why it's there. Alongside it, all the verification details: the full commit SHA, the full key fingerprint, links to `manifest.txt` and `manifest.txt.sig`, and the `/verify/` commands. It should work with JavaScript disabled (e.g. a native `<details>`/`<summary>` disclosure, no script), so it adds nothing to the JS budget. Open question for its review: does it replace the `/verify/` link or sit beside it? It also covers explaining how to check pages other than the front page (raised at the P3 gate).
 - **Reproducible builds:** publish build instructions so anyone can rebuild from source and match the manifest. Determinism is already enforced, so this is mostly documentation plus a CI rebuild check.
 - **Commit signing:** sign git commits with the same key under the `git` namespace.
 - **Deeper research write-up:** only with `pi_signoff: true`.
@@ -464,7 +474,7 @@ These are not in launch scope. Each needs its own review.
 ## 15. Open items (Michael)
 
 - [ ] Domain name (replace `DOMAIN` everywhere).
-- [ ] Resume source content for the HTML resume page.
+- [ ] Resume source content for the HTML resume page. Pending upload: `/resume/` is a generic skeleton until then, and `TODO-COPY(resume-pdf)` blocks deploy until the PDF is committed.
 - [ ] Any projects beyond the three seed entries.
 - [ ] Positioning line for the front page.
 - [ ] Cloudflare Pages project name.
