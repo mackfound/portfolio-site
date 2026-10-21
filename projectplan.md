@@ -455,6 +455,7 @@ These are not in launch scope. Each needs its own review.
 
 - **Notes:** the first post, then flip `notes.show` to `true`.
 - **In-browser verification:** a Web Crypto "verify this page" button. Expect a budget flag.
+- **Footer verification disclosure:** an info icon on the footer attestation line that opens Michael's explanation, `TODO-COPY(footer-attestation-explainer)`: what the line is, what it does, and why it's there. Alongside it, all the verification details: the full commit SHA, the full key fingerprint, links to `manifest.txt` and `manifest.txt.sig`, and the `/verify/` commands. It should work with JavaScript disabled (e.g. a native `<details>`/`<summary>` disclosure, no script), so it adds nothing to the JS budget. Open question for its review: does it replace the `/verify/` link or sit beside it? It also covers explaining how to check pages other than the front page (raised at the P3 gate).
 - **Reproducible builds:** publish build instructions so anyone can rebuild from source and match the manifest. Determinism is already enforced, so this is mostly documentation plus a CI rebuild check.
 - **Commit signing:** sign git commits with the same key under the `git` namespace.
 - **Deeper research write-up:** only with `pi_signoff: true`.
