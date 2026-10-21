@@ -193,7 +193,7 @@ All dependencies use exact versions with no ranges. Pick versions at least two w
 ]
 ```
 
-- **Adding a section:** create a folder under `src/`, register its collection in `eleventy.config.js` (one line, glob-based), and add one entry here.
+- **Adding a section:** create a folder under `src/` (its entries plus a `<folder>.11tydata.json` setting layout and permalink), and add one entry here. `eleventy.config.js` registers every collection named in this file from `src/<collection>/*.md`, so it needs no edit.
 - **Generic renderer:** `section-list.njk` renders any registered section.
 - **Validation:** `check-content.js` validates this file against a schema.
 

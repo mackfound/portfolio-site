@@ -1,5 +1,27 @@
-{# Generic front-page renderer for one entry of sections.json.
-   Expects `section` in scope. Filtering and entry markup arrive in P1. #}
-<section id="{{ section.id }}">
-  <h2>{{ section.label }}</h2>
+{# Generic front-page renderer for one entry of sections.json (`section` in scope).
+   A `collection` section lists its latest entries; a `page` section shows that
+   page's `blurb` and links to it. #}
+<section id="{{ section.id }}" aria-labelledby="{{ section.id }}-heading">
+  <h2 id="{{ section.id }}-heading">{{ section.label }}</h2>
+{% if section.page %}
+  {% set target = collections.all | pageByUrl(section.page) %}
+  <p>{{ target.data.blurb }}</p>
+  {% if target.data.contact %}{% include "contact.njk" %}{% endif %}
+  <p><a href="{{ section.page }}">More →</a></p>
+{% else %}
+  <ul>
+  {% for entry in collections | sectionEntries(section) %}
+    <li>
+      <h3><a href="{{ entry.data.url or entry.url }}">{{ entry.data.title }}</a></h3>
+      <p>
+        {% if entry.data.outlet %}{{ entry.data.outlet }} · {% endif %}
+        {% if entry.data.date %}<time datetime="{{ entry.data.date | isoDate }}">{{ entry.data.date | displayDate }}</time>{% elif entry.data.period %}{{ entry.data.period }}{% endif %}
+      </p>
+      <p>{{ entry.data.summary or entry.data.deck }}</p>
+    </li>
+  {% endfor %}
+  </ul>
+  {% set index = collections.all | pageByUrl("/" + section.collection + "/") %}
+  {% if index %}<p><a href="{{ index.url }}">All {{ section.label | lower }} →</a></p>{% endif %}
+{% endif %}
 </section>
