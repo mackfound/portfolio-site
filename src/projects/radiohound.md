@@ -30,6 +30,6 @@ The harness caught and correctly attributed all three injected faults on 100 of 
 
 ## Links
 
-* Final paper (spring): {% if assets.radiohoundPaper %}[Optimizing Module Development Workflows Utilizing a Pythonic Hardware Description Language](/assets/media/pythonic-hdl-workflows-paper.pdf){% else %}TODO-COPY(radiohound-paper-pdf){% endif %}
+* Final paper (spring): {% if assets.radiohoundPaper %}[AmaranthHDL in RadioHound: Optimizing Module Development Workflows Utilizing a Pythonic Hardware Description Language](/assets/media/pythonic-hdl-workflows-paper.pdf) (PDF){% else %}TODO-COPY(radiohound-paper-pdf){% endif %}
 * Amaranth HDL blinky (spring): [github.com/mackfound/amaranthHDL-blinky](https://github.com/mackfound/amaranthHDL-blinky)
 * The fall harness is in my private repository.
