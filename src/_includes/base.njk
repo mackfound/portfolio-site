@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} · {% endif %}{{ site.name }}</title>
+  <meta name="description" content="TODO-COPY(meta-{{ metaSlot or 'page' }})">
+  <meta property="og:title" content="{% if title %}{{ title }} · {% endif %}{{ site.name }}">
+  <meta property="og:description" content="TODO-COPY(meta-{{ metaSlot or 'page' }})">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+  {% include "masthead.njk" %}
+
+  <main>
+    {{ content | safe }}
+  </main>
+
+  <footer>
+    <p><a href="/resume/">Resume</a></p>
+    <p class="attestation"><a href="/verify/">build {{ build.sha or "…" }} · signed {{ site.keyFingerprint or "…" }} · verify →</a></p>
+  </footer>
+</body>
+</html>

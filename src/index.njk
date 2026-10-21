@@ -1,0 +1,10 @@
+---
+layout: base.njk
+metaSlot: home
+---
+<h1 class="visually-hidden">{{ site.name }}</h1>
+<p>TODO-COPY(home-positioning)</p>
+
+{% for section in sections %}{% if section.show %}
+{% include "section-list.njk" %}
+{% endif %}{% endfor %}
