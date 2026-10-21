@@ -59,7 +59,7 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 **Edition (structure).** The front page is set like a publication of record.
 - **Masthead:** "M. Doyle".
 - **Dateline:** a rule-separated line under the masthead: `Vol. V · No. N` on the left, the edition date on the right.
-- **Late Edition:** in dark mode, the dateline reads "Late Edition". This is CSS-only, using `prefers-color-scheme` and a `::after` or visibility swap. No JavaScript.
+- **Late Edition:** in dark mode, the dateline reads "Late Edition", appended to the left side (`Vol. V · No. N · Late Edition`); the date stays visible. This is CSS-only, using `prefers-color-scheme` and a `::after` or visibility swap. No JavaScript.
 
 **Attested (signature).** Every page footer carries the short source commit SHA, the signing key fingerprint, and a link to `/verify/`. The signing pipeline is specified in section 9.
 
@@ -74,7 +74,7 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 
 ### Front page order
 
-1. Masthead and dateline.
+1. Masthead (left-aligned), standing line `TODO-COPY(home-standing)` with school and year, dateline, and an index strip of section links plus Resume (generated from `sections.json`).
 2. Positioning line: one sentence, `TODO-COPY(home-positioning)`.
 3. Lead stories: projects with `status: current`, `kind: project`, ordered by `order`.
 4. Research: projects with `status: current`, `kind: research`.
@@ -95,6 +95,7 @@ Sections 3–7 render from `sections.json` in configured order. The order above 
 - **Numerals:** tabular figures (`font-variant-numeric: tabular-nums`) for all dates, edition numbers, and hashes.
 - **Monospace:** the system mono stack for hashes and commands.
 - **Font budget:** if the variable font files exceed the font budget (section 8), stop and ask. The likely alternative is static instances (400, 500, 400 italic) plus one display instance for the masthead.
+- **Shipped setup (approved at P2):** the variable roman instanced to wght 400–500 with the full opsz axis, renamed "Doyle Serif" under the OFL Reserved Font Name clause, plus Fontsource's static 400 italic. `scripts/fonts/build-fonts.sh` rebuilds both reproducibly.
 
 ### Color and theme
 
@@ -193,7 +194,7 @@ All dependencies use exact versions with no ranges. Pick versions at least two w
 ]
 ```
 
-- **Adding a section:** create a folder under `src/`, register its collection in `eleventy.config.js` (one line, glob-based), and add one entry here.
+- **Adding a section:** create a folder under `src/` (its entries plus a `<folder>.11tydata.json` setting layout and permalink), and add one entry here. `eleventy.config.js` registers every collection named in this file from `src/<collection>/*.md`, so it needs no edit.
 - **Generic renderer:** `section-list.njk` renders any registered section.
 - **Validation:** `check-content.js` validates this file against a schema.
 

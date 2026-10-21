@@ -1,0 +1,5 @@
+{# Contact line: email and profile links from site.json. Empty values are skipped. #}
+<p class="contact">
+  {% if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}
+  {% for name, href in site.links %}{% if href %} · <a href="{{ href }}">{{ name | capitalize }}</a>{% endif %}{% endfor %}
+</p>

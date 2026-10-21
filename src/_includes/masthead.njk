@@ -1,7 +1,14 @@
-<header>
-  <p class="masthead"><a href="/">{{ site.name }}</a></p>
+{# The front page gets the full nameplate (as its h1) and the standing line;
+   inner pages get a compact masthead and keep their own h1. #}
+{% set front = page.url == "/" %}
+<header class="masthead{% if not front %} masthead--compact{% endif %}">
+  {% if front %}<h1 class="masthead__name">{{ site.name }}</h1>{% else %}<p class="masthead__name"><a href="/">{{ site.name }}</a></p>{% endif %}
+  {% if front %}<p class="masthead__standing">TODO-COPY(home-standing)</p>{% endif %}
   <p class="dateline">
-    <span>Vol. V · No. {{ edition.number }}</span>
-    <span>{{ edition.date }}</span>
+    <span>Vol. V · No. {{ edition.number }}<span class="dateline__late"> · Late Edition</span></span>
+    {% if edition.date %}<time datetime="{{ edition.date }}">{{ edition.date | displayDate }}</time>{% endif %}
   </p>
+  <nav class="index-strip" aria-label="Sections">
+    {% for section in sections %}{% if section.show %}<a href="/#{{ section.id }}">{{ section.label }}</a> · {% endif %}{% endfor %}<a href="/resume/">Resume</a>
+  </nav>
 </header>
