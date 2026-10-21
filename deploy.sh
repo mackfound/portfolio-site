@@ -38,7 +38,9 @@ warn_or_fail() {
 [ "$custom_signers" = 0 ] || [ "$dry" = 1 ] || fail "--signers is for dry runs only; real deploys verify against the repo's allowed_signers"
 
 step "1. Preflight"
-[ -z "$(git status --porcelain)" ] || fail "the working tree is not clean"
+dirty="$(git status --porcelain)"
+[ -z "$dirty" ] || fail "the working tree is not clean. Commit, stash or discard these first:
+$dirty"
 branch="$(git rev-parse --abbrev-ref HEAD)"
 [ "$branch" = main ] || warn_or_fail "on branch $branch, not main"
 [ "$dry" = 1 ] || [ -n "$PAGES_PROJECT" ] || fail "PAGES_PROJECT is not set at the top of deploy.sh"
