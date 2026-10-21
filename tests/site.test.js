@@ -114,4 +114,3 @@ test("text and link tokens meet WCAG AA (4.5:1) on paper in both themes", () => 
     }
   }
 });
-test.todo("manifest round-trip with a throwaway key (P4)");
