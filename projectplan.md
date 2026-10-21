@@ -372,6 +372,14 @@ Each step aborts the deploy on failure.
    - Exits non-zero with a list of any mismatched URLs.
 9. **Push:** push the commits to GitHub.
 
+`check-copy.js --strict` also runs on the built site after step 3, because the meta-description slots exist only in output. A real deploy refuses while `PAGES_PROJECT` (top of `deploy.sh`) is empty.
+
+**Dry run** (`npm run deploy:dry-run`, approved at P4): makes a throwaway key and runs `deploy.sh --dry-run --key <tmp> --signers <tmp>`.
+- Not being on `main` and remaining `TODO-COPY` slots are warnings; a dirty tree and a failing `npm test` still abort.
+- `edition.json` is bumped for the build and restored afterwards; nothing is committed.
+- Steps 7 and 9 are skipped.
+- Step 8 runs `verify-live.js --local _site` against a local server that resolves URLs the way Pages does.
+
 ### Footer attestation line
 
 `build <short commit sha> · signed <key fingerprint, shortened> · verify →`
