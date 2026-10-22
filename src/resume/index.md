@@ -81,5 +81,5 @@ Haddonfield, NJ · 2025
   <dt>Languages</dt><dd>Python, C/C++, TypeScript, Verilog, SQL, HTML/CSS</dd>
   <dt>Security</dt><dd>Intel SGX, Intel TDX, remote attestation, X.509 certificate parsing</dd>
   <dt>Tools</dt><dd>Claude Code, Git, Linux, Google Cloud Platform, Netlify, Vite, Gradio</dd>
-  <dt>Certifications</dt><dd>ISC2 Certified in Cybersecurity (CC) – May 2026</dd>
+  <dt>Certifications</dt><dd>ISC2 Certified in Cybersecurity (CC) – March 2026</dd>
 </dl>
