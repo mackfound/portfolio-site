@@ -26,7 +26,6 @@ export const SCHEMAS = {
     strict: true,
     fields: {
       title: ["string", true],
-      kind: ["string", true, ["project", "research"]],
       status: ["string", true, ["current", "past"]],
       order: ["integer", true],
       period: ["string", true],
@@ -35,8 +34,25 @@ export const SCHEMAS = {
       links: ["links", false],
       summary: ["string", true],
       description: ["string", false],
-      detail: ["string", false, ["high-level", "deep"]],
-      pi_signoff: ["boolean", false],
+      lead: ["boolean", false],
+    },
+  },
+  // Research entries are projects plus the disclosure guardrail (projectplan.md §6).
+  research: {
+    strict: true,
+    fields: {
+      title: ["string", true],
+      status: ["string", true, ["current", "past"]],
+      order: ["integer", true],
+      period: ["string", true],
+      role: ["string", true],
+      stack: ["stringList", true],
+      links: ["links", false],
+      summary: ["string", true],
+      description: ["string", false],
+      lead: ["boolean", false],
+      detail: ["string", true, ["high-level", "deep"]],
+      pi_signoff: ["boolean", true],
     },
   },
   writing: {
@@ -89,19 +105,17 @@ export function validateEntry(entry) {
   const schema = SCHEMAS[entry.collection] ?? DEFAULT_SCHEMA;
   const errors = checkFields(entry.path, entry.data, schema);
 
-  if (entry.collection === "projects") {
-    const d = entry.data;
-    if (d.kind === "research") {
-      if (d.detail === undefined) errors.push(`${entry.path}: research needs "detail"`);
-      if (d.pi_signoff === undefined) errors.push(`${entry.path}: research needs "pi_signoff"`);
-      if (d.detail === "deep" && d.pi_signoff !== true) {
-        errors.push(`${entry.path}: detail "deep" requires pi_signoff: true`);
-      }
-    } else if (d.detail !== undefined || d.pi_signoff !== undefined) {
-      errors.push(`${entry.path}: "detail" and "pi_signoff" are for research only`);
-    }
+  if (entry.collection === "research" && entry.data.detail === "deep" && entry.data.pi_signoff !== true) {
+    errors.push(`${entry.path}: detail "deep" requires pi_signoff: true`);
   }
   return errors;
+}
+
+// The front page has at most one lead story, from any collection.
+// `entries` is a list of { path, data }.
+export function validateLead(entries) {
+  const leads = entries.filter((e) => e.data.lead === true).map((e) => e.path);
+  return leads.length > 1 ? [`only one entry may set lead: true (found ${leads.join(", ")})`] : [];
 }
 
 const SECTION_FIELDS = {

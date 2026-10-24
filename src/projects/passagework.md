@@ -1,7 +1,7 @@
 ---
 title: Passagework
-kind: project
 status: current
+lead: true
 order: 1
 period: Jul–Aug 2026
 role: Product, design, and review

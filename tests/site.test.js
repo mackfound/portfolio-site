@@ -60,11 +60,24 @@ test("every page sets lang and has exactly one h1", () => {
 });
 
 test("every launch page is built (projectplan.md §13)", () => {
-  const projects = readdirSync(join(ROOT, "src/projects"))
-    .filter((f) => f.endsWith(".md")).map((f) => `projects/${f.slice(0, -3)}/index.html`);
-  const expected = ["index.html", "projects/index.html", ...projects, "writing/index.html",
+  const entries = (dir) => readdirSync(join(ROOT, "src", dir))
+    .filter((f) => f.endsWith(".md")).map((f) => `${dir}/${f.slice(0, -3)}/index.html`);
+  const expected = ["index.html", "research/index.html", ...entries("research"),
+    "projects/index.html", ...entries("projects"), "writing/index.html",
     "about/index.html", "resume/index.html", "verify/index.html", "404.html", "notes/feed.xml"];
   assert.deepEqual(expected.filter((f) => !existsSync(join(out, f))), []);
+});
+
+test("research and projects are separate pages, each listing only its own entries", () => {
+  const html = (p) => pages.find((page) => page.path === p).html;
+  const links = (p, dir) => new Set([...html(p).matchAll(new RegExp(`href="/${dir}/([a-z0-9-]+)/"`, "g"))].map((m) => m[1]));
+  for (const [own, other] of [["research", "projects"], ["projects", "research"]]) {
+    const listed = links(`${own}/index.html`, own);
+    const expected = readdirSync(join(ROOT, "src", own)).filter((f) => f.endsWith(".md")).map((f) => f.slice(0, -3));
+    assert.deepEqual([...listed].sort(), expected.sort(), `/${own}/ lists every ${own} entry`);
+    assert.equal(links(`${own}/index.html`, other).size, 0, `/${own}/ lists no ${other} entries`);
+  }
+  assert.match(html("index.html"), /<nav class="index-strip"[^>]*>\s*<a href="\/research\/">Research<\/a>/);
 });
 
 test("the notes feed is dated from content or the edition, never the build time", () => {
