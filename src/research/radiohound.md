@@ -1,6 +1,5 @@
 ---
 title: RadioHound
-kind: project
 status: past
 order: 1
 period: Mar–Oct 2026
@@ -8,6 +7,8 @@ role: Undergraduate researcher, Notre Dame Wireless Institute (STRAND)
 stack: [Python, Amaranth HDL, Verilog, NumPy, Zynq-7000]
 summary: "Research on RadioHound, a receiver that computes power spectra on a Zynq FPGA. I learned to write FPGA hardware in Python, then built a harness for checking the FPGA's spectrum math against a software reference."
 description: "RadioHound: verifying an FPGA spectrum receiver's math against a software reference, plus building FPGA hardware in Python with Amaranth HDL."
+detail: high-level
+pi_signoff: false
 ---
 
 ## Problem

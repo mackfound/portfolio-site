@@ -1,6 +1,5 @@
 ---
 title: TODO-COPY(project-remote-attestation-title)
-kind: research
 status: current
 order: 1
 period: TODO-COPY(project-remote-attestation-period)
