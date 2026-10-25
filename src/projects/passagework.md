@@ -13,7 +13,7 @@ summary: "A browser tool for practicing musicians that loops a short passage of 
 description: "Passagework loops a passage of a recording while the sheet music stays on screen, from half speed to full, hands-free, for audition practice."
 ---
 
-{% set caption %}TODO-COPY(passagework-figure-caption){% endset %}
+{% set caption %}Brahms, Symphony No. 4, III, recorded by Musopen (CC0). Drag the loop’s edges, or click the waveform and use Space, I and O as in Passagework. Below 100%, this demo uses the browser’s playback and can leave a seam that Passagework doesn’t.{% endset %}
 {% include "passagework-figure.njk" %}
 
 ## Problem

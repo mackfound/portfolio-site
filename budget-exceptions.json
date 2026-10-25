@@ -1,1 +1,4 @@
-[]
+[
+  { "path": "/", "budget": "js", "limit": "1 KB", "reason": "Dateline tick: the one ambient motion (spec §2, §3)", "approved": "2026-10-25" },
+  { "path": "/projects/passagework/", "budget": "js", "limit": "3 KB", "reason": "Passagework working figure (spec §3)", "approved": "2026-10-25" }
+]
