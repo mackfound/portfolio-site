@@ -1,6 +1,8 @@
-// check-copy — lists every remaining TODO-COPY slot in src/ and _site/
-// (projectplan.md §7). Warns by default; `--strict` (used by deploy.sh) fails
-// if any slot remains. Duplicate slot names in src/ always fail.
+// check-copy — lists every remaining TODO-COPY slot (projectplan.md §7). A slot
+// remains if it renders in _site/. Slots in src/ that don't render (template
+// fallbacks for a missing file or key) are listed but don't count. Warns by
+// default; `--strict` (used by deploy.sh) fails if any slot remains or there is
+// no _site/ to scan. Duplicate slot names in src/ always fail.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -36,20 +38,26 @@ if (existsSync("_site")) {
   }
 }
 
+const built = existsSync("_site");
 const duplicates = [...inSrc].filter(([, where]) => where.length > 1);
-const all = [...new Set([...inSrc.keys(), ...inSite])].sort();
+// Without a build, every slot in src/ might render, so all of them count.
+const remaining = [...new Set([...(built ? [] : inSrc.keys()), ...inSite])].sort();
+const fallbacks = built ? [...inSrc.keys()].filter((name) => !inSite.has(name)).sort() : [];
 
-for (const name of all) {
+for (const name of remaining) {
   const where = inSrc.get(name)?.[0] ?? "(rendered in _site/)";
   console.log(`  ${name}  ${where}`);
+}
+for (const name of fallbacks) {
+  console.log(`  ${name}  ${inSrc.get(name)[0]}  (fallback, not rendered)`);
 }
 for (const [name, where] of duplicates) {
   console.error(`check-copy: slot "${name}" is used more than once: ${where.join(", ")}`);
 }
 
-const verdict = `check-copy: ${all.length} slot(s) remaining${existsSync("_site") ? "" : " (no _site/ to scan)"}`;
-if (duplicates.length || (strict && all.length)) {
+const verdict = `check-copy: ${remaining.length} slot(s) remaining${built ? "" : " (no _site/ to scan)"}`;
+if (duplicates.length || (strict && (remaining.length || !built))) {
   console.error(verdict);
   process.exit(1);
 }
-console.log(all.length ? `${verdict} — warning only; deploy will refuse` : verdict);
+console.log(remaining.length ? `${verdict} — warning only; deploy will refuse` : verdict);
