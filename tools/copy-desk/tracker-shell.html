@@ -1,0 +1,195 @@
+<title>Copy Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a single column like the site itself — a ruled masthead with the tally, a filter strip, then one ruled section per page with its slots as rows. */
+@font-face { font-family: "Doyle Serif"; src: url(data:font/woff2;base64,/*FONT*/) format("woff2"); font-weight: 400 500; font-display: swap; }
+:root {
+  --paper: #f6f1e7; --ink: #1c1a16; --muted: #5b554a; --rule: #cfc6b4; --accent: #8c2f22; --done: #3f6b3a; --chip: #ece5d6;
+  --serif: "Doyle Serif", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #15130f; --ink: #ece5d8; --muted: #a59c8c; --rule: #3d382f; --accent: #e39a83; --done: #9cc58f; --chip: #24211b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #15130f; --ink: #ece5d8; --muted: #a59c8c; --rule: #3d382f; --accent: #e39a83; --done: #9cc58f; --chip: #24211b; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 17px; line-height: 1.5; }
+.wrap { max-width: 64rem; margin: 0 auto; padding-block: 1.5rem 4rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font-weight: 500; font-size: clamp(2.25rem, 8vw, 3.5rem); line-height: 1; margin: 0; }
+.dateline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; margin-top: 0.75rem; padding: 0.4rem 0;
+  border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink);
+  font-family: var(--sans); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.tally { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 1rem; align-items: center; margin: 1.25rem 0 0.5rem; }
+.tally strong { font-weight: 500; font-size: 2rem; font-variant-numeric: tabular-nums; line-height: 1; }
+.tally span { color: var(--muted); }
+.bar { grid-column: 1 / -1; height: 6px; background: var(--chip); }
+.bar i { display: block; height: 100%; background: var(--done); }
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-items: center; padding: 0.75rem 0; margin-top: 1rem;
+  border-block: 1px solid var(--rule); font-family: var(--sans); font-size: 0.875rem; }
+.filters label.lbl { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-right: 0.25rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.chips button { font: inherit; font-size: 0.8125rem; padding: 0.2rem 0.6rem; border: 1px solid var(--rule); background: var(--chip); color: var(--ink); border-radius: 999px; cursor: pointer; }
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.chips button:focus-visible, input:focus-visible, .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type="search"] { font: inherit; padding: 0.3rem 0.6rem; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); min-width: 0; width: 14rem; max-width: 100%; }
+section { margin-top: 2rem; }
+section h2 { display: flex; justify-content: space-between; gap: 1rem; margin: 0 0 0.25rem; padding-top: 0.4rem; border-top: 1px solid var(--ink);
+  font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+section h2 span { color: var(--muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+.url { margin: 0 0 0.5rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.row { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 0 0.75rem; padding: 0.7rem 0; border-top: 1px solid var(--rule); }
+.row:first-of-type { border-top: 0; }
+.mark { width: 1.1rem; height: 1.1rem; margin-top: 0.2rem; padding: 0; border: 1.5px solid var(--muted); background: transparent; cursor: pointer; position: relative; }
+.mark:disabled { cursor: default; }
+.mark:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row.drafted .mark { border-color: var(--accent); }
+.row.drafted .mark::after { content: ""; position: absolute; inset: 3px; background: var(--accent); }
+.row.done .mark { background: var(--done); border-color: var(--done); }
+.drafted-tag { font-family: var(--sans); font-size: 0.7rem; color: var(--accent); }
+.row.done .name { text-decoration: line-through; color: var(--muted); }
+.top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.75rem; }
+.name { font-family: var(--mono); font-size: 0.875rem; overflow-wrap: anywhere; }
+.kind { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.nodeploy { font-family: var(--sans); font-size: 0.7rem; color: var(--muted); border: 1px solid var(--rule); padding: 0 0.35rem; }
+.hint { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.9375rem; }
+.where { margin: 0.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-family: var(--mono); font-size: 0.8125rem; }
+.where em { font-style: normal; color: var(--muted); }
+.copy { font-family: var(--sans); font-size: 0.75rem; padding: 0.1rem 0.5rem; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
+.empty { color: var(--muted); font-style: italic; margin-top: 2rem; }
+.foot { margin-top: 3rem; padding-top: 0.5rem; border-top: 1px solid var(--ink); color: var(--muted); font-size: 0.875rem; }
+.foot code { font-family: var(--mono); font-size: 0.8125rem; }
+.sync { font-family: var(--sans); font-size: 0.8125rem; color: var(--muted); margin: 0.25rem 0 0; }
+@media (prefers-reduced-motion: no-preference) { .bar i { transition: width 200ms ease-out; } }
+</style>
+
+<div class="wrap">
+  <h1>Copy Desk</h1>
+  <p class="dateline"><span>M. Doyle · Vol. V · P6</span><span id="stamp"></span></p>
+
+  <div class="tally" aria-live="polite">
+    <strong id="count"></strong><span id="count-label"></span>
+    <div class="bar" role="presentation"><i id="bar"></i></div>
+  </div>
+  <p class="sync" id="sync">Loading your ticks…</p>
+
+  <div class="filters">
+    <div><label class="lbl" id="status-lbl">Show</label><span class="chips" id="status" role="group" aria-labelledby="status-lbl"></span></div>
+    <div><label class="lbl" id="kind-lbl">Kind</label><span class="chips" id="kinds" role="group" aria-labelledby="kind-lbl"></span></div>
+    <div><label class="lbl" for="q">Find</label><input type="search" id="q" placeholder="slot, file or page"></div>
+  </div>
+
+  <div id="groups"></div>
+
+  <p class="foot">Tick a slot when you've drafted it; ticks are saved with this page, so they follow you across devices. A slot turns <strong>written</strong> once its TODO-COPY is gone from the repo and this page is refreshed from it. Before deploying, <code>node scripts/check-copy.js</code> gives the same list in the terminal, and <code>./deploy.sh</code> refuses while any slot that blocks deploy remains.</p>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const state = { status: "todo", kinds: new Set(), q: "" };
+const drafted = new Set();   // slot names you've ticked (db: drafted/<slot>)
+let db = null;               // null until the store answers, or if this view can't write
+let canTick = false;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+$("stamp").textContent = `Baseline ${DATA.base} · repo ${DATA.head} · ${DATA.generated}`;
+
+const kinds = [...new Set(DATA.slots.map((s) => s.kind))].sort();
+for (const [value, label] of [["todo", "To do"], ["drafted", "Drafted"], ["done", "Written"], ["all", "All"]]) {
+  const b = document.createElement("button");
+  b.type = "button"; b.textContent = label; b.dataset.value = value;
+  b.addEventListener("click", () => { state.status = value; render(); });
+  $("status").append(b);
+}
+for (const k of kinds) {
+  const b = document.createElement("button");
+  b.type = "button"; b.dataset.value = k;
+  b.addEventListener("click", () => { state.kinds.has(k) ? state.kinds.delete(k) : state.kinds.add(k); render(); });
+  $("kinds").append(b);
+}
+$("q").addEventListener("input", (e) => { state.q = e.target.value.trim().toLowerCase(); render(); });
+
+function render() {
+  const all = DATA.slots, done = all.filter((s) => s.done).length;
+  const blocking = all.filter((s) => s.blocks && !s.done).length;
+  $("count").textContent = `${done} / ${all.length}`;
+  const nDrafted = all.filter((s) => !s.done && drafted.has(s.name)).length;
+  $("count-label").textContent = `written · ${nDrafted} drafted · ${blocking} still block${blocking === 1 ? "s" : ""} deploy`;
+  $("bar").style.width = `${(done / all.length) * 100}%`;
+  for (const b of $("status").children) b.setAttribute("aria-pressed", String(b.dataset.value === state.status));
+  for (const b of $("kinds").children) {
+    const n = all.filter((s) => s.kind === b.dataset.value && !s.done && !drafted.has(s.name)).length;
+    b.textContent = `${b.dataset.value} ${n}`;
+    b.setAttribute("aria-pressed", String(state.kinds.has(b.dataset.value)));
+  }
+
+  const shown = all.filter((s) =>
+    (state.status === "all" || state.status === statusOf(s)) &&
+    (!state.kinds.size || state.kinds.has(s.kind)) &&
+    (!state.q || `${s.name} ${s.file} ${s.page}`.toLowerCase().includes(state.q)));
+
+  const groups = new Map();
+  for (const s of shown) { if (!groups.has(s.page)) groups.set(s.page, []); groups.get(s.page).push(s); }
+  $("groups").innerHTML = groups.size ? [...groups].map(([page, rows]) => `
+    <section>
+      <h2>${esc(page)}<span>${rows.filter((r) => statusOf(r) === "todo").length} to do</span></h2>
+      ${rows[0].url ? `<p class="url">${esc(rows[0].url)}</p>` : ""}
+      ${rows.map((s) => `
+        <div class="row ${statusOf(s)}">
+          <button class="mark" type="button" role="checkbox" data-slot="${esc(s.name)}"
+            aria-checked="${s.done || drafted.has(s.name)}" aria-label="Drafted: ${esc(s.name)}"
+            ${s.done || !canTick ? "disabled" : ""} title="${s.done ? "Written: gone from the repo" : canTick ? "Mark as drafted" : "Ticking is unavailable in this view"}"></button>
+          <div>
+            <div class="top"><span class="name">${esc(s.name)}</span><span class="kind">${esc(s.kind)}</span>${statusOf(s) === "drafted" ? '<span class="drafted-tag">drafted</span>' : ""}${s.blocks ? "" : '<span class="nodeploy">does not block deploy</span>'}</div>
+            <p class="hint">${esc(s.hint)}</p>
+            <p class="where"><span>${esc(s.file)}:${s.line}</span>${s.context ? `<em>${esc(s.context)}</em>` : ""}<button class="copy" type="button" data-path="${esc(s.file)}:${s.line}">Copy path</button></p>
+          </div>
+        </div>`).join("")}
+    </section>`).join("") : `<p class="empty">Nothing matches. ${state.status === "todo" && !state.kinds.size && !state.q ? "Every slot is drafted or written." : "Clear a filter."}</p>`;
+}
+
+function statusOf(s) { return s.done ? "done" : drafted.has(s.name) ? "drafted" : "todo"; }
+
+// Ticks: one document per drafted slot under drafted/, written only on a click.
+$("groups").addEventListener("click", async (e) => {
+  const box = e.target.closest(".mark");
+  if (!box || box.disabled || !db) return;
+  const name = box.dataset.slot, ref = db.doc(`drafted/${name}`);
+  const was = drafted.has(name);
+  was ? drafted.delete(name) : drafted.add(name);
+  render();
+  try {
+    if (was) await ref.delete(); else await ref.set({ drafted: true, at: new Date().toISOString() });
+  } catch (err) {
+    was ? drafted.add(name) : drafted.delete(name);
+    if (err?.code === "invalid_argument") { canTick = false; $("sync").textContent = "This view can't save ticks."; }
+    else $("sync").textContent = "That tick didn't save. Try again in a moment.";
+    render();
+  }
+});
+
+(async () => {
+  const use = (name) => (window.claude?.use ? window.claude.use(name) : Promise.resolve(null));
+  const [store, user] = await Promise.all([use("db"), use("user")]);
+  if (!store) { $("sync").textContent = "Ticks can't load in this view; the list still reflects the repo."; return; }
+  db = store;
+  canTick = user ? user.isOwner() : true;
+  db.collection("drafted").onSnapshot((snap) => {
+    drafted.clear();
+    for (const d of snap.docs) if (d.data()?.drafted) drafted.add(d.id);
+    $("sync").textContent = canTick ? "Ticks are saved and synced across your devices." : "Read-only: only the owner can tick slots.";
+    render();
+  }, () => { $("sync").textContent = "Ticks stopped syncing; reload the page."; });
+})();
+
+$("groups").addEventListener("click", async (e) => {
+  const b = e.target.closest(".copy");
+  if (!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.path); b.textContent = "Copied"; }
+  catch { const r = document.createRange(); r.selectNodeContents(b.previousElementSibling ?? b); getSelection().removeAllRanges(); getSelection().addRange(r); b.textContent = "Selected"; }
+  setTimeout(() => { b.textContent = "Copy path"; }, 1500);
+});
+
+render();
+</script>

@@ -1,0 +1,94 @@
+# M. Doyle, Vol. V: working notes for Claude Code
+
+`projectplan.md` is the spec. This file records how we work, what's been decided since the spec was written, and what's next. If this file disagrees with the spec, say so; don't silently pick one.
+
+## Hard rules
+
+- **Signing key.** Never generate, read, print, copy, move, or otherwise handle the real private signing key. `allowed_signers` (public) is fine.
+- **No AI-written prose in shipped content.** Michael writes the copy. The one exception is meta descriptions (spec §7): draft each one from the page's existing copy, get Michael's approval, then commit. Never draft a meta before the copy it summarizes exists. Until then, it stays a `TODO-COPY(meta-…)` slot.
+- **Critique before committing copy.** When Michael sends copy, review it for coherence, contradictions with other pages (resume, About, project pages), tone, and length *before* committing. Be direct; don't soften.
+- **Stop and ask before** adding a dependency, approaching or exceeding a budget (§8), changing a content schema, renaming content files, or deviating from the agreed design direction.
+- **One PR per phase or step.** After a PR is merged, restart the working branch from `origin/main` before new work. Never stack on merged history.
+- **Determinism.** The build must stay byte-identical across runs (`scripts/check-determinism.sh`). Dates come from `edition.json` or front matter, never build time.
+
+## How Michael likes to work
+
+- Ask clarifying questions where a choice is his; offer a recommended option.
+- Be clear when he's wrong. No flattery.
+- Prefer interactive diagrams or artifacts over long text dumps. Design choices are made from rendered samples, not descriptions.
+
+## Commands
+
+| Task | Command |
+|---|---|
+| Toolchain | `fnm use` (reads `.nvmrc`), then `npm ci` |
+| Dev server (slots highlighted) | `npm run serve` |
+| All checks | `npm test` (content, copy slots, budgets, unit/site tests, determinism) |
+| Deploy dry run | `./deploy.sh --dry-run` (Michael runs real deploys; the key is on his laptop) |
+| Copy Desk page | `node tools/copy-desk/gen-tracker.mjs` → republish `tools/copy-desk/copy-desk.html` |
+| Preview build | `node tools/preview/build.mjs <dir>` then `node tools/preview/relink.mjs <dir> <sha>` |
+| R1 sampler | `node design/r1-sampler/assemble.mjs` |
+
+## Artifacts on claude.ai
+
+These are private to Michael. To update one from a new session, read it by URL, then publish to the same URL.
+
+- Copy Desk (copy slot tracker; checkbox state lives in its database): https://claude.ai/artifact/WHLBgTAuCHPRjbUiCvAUyv
+- Site preview (static build, links relinked): https://claude.ai/artifact/6sP9zuxfNuWyGU81JHcAwA. The artifact host wraps the main page in its own skeleton, so the preview's `index.html` carries a one-rule `body` font/color override.
+- R1 design sampler (the approved direction): https://claude.ai/artifact/Kuz8evYrFzCLi26KVwRJL7. Publish `out/vol-v-directions.html` with `brahms4-iii.mp4` and `brahms4-iii.ogg` in `files`.
+
+## Decisions since the spec (newest last)
+
+- **2026-10-24: R1 redesign review.** On seeing the preview, Michael found the P2 look bland: warm cream, serif, brick accent, and hairline rules, a common "generated site" cluster. Decisions:
+  - **Direction: Broadsheet+.** Keep the publication-of-record concept but commit to it:
+    - a bigger masthead;
+    - a **lead story** with its working figure;
+    - press red `#c8102e` (dark `#ff7a70`) replacing the brick accent;
+    - newsprint paper `#f3f2ee` (dark `#121211`);
+    - 3 px section rules.
+
+    The exact tokens and CSS are in `design/r1-sampler/sampler.src.html`. The Title block and Manifest directions were rejected.
+  - **Motion rule** (replaces spec §2's motion ban; write it into the spec in R3): motion only answers the visitor (hover, focus, click, drag, navigation), plus **exactly one ambient element**. Nothing is scroll-triggered. Honor `prefers-reduced-motion`. Every page fully works with JS off.
+  - **Ambient element: the dateline tick.** The edition number and content hash resolve into place once on load.
+  - **Randomart:** the signing-key fingerprint drawn as OpenSSH randomart (drunken bishop; verified identical to `ssh-keygen -lv`). It is static and lives **only on `/verify/`**, beside the fingerprint. It is not in the masthead or the footer.
+  - **Working figures:** at most one per entry page. Passagework's figure loops a real recording: the opening 25 s of Brahms Symphony No. 4, III (Musopen, CC0; see `design/r1-sampler/CREDITS`).
+    - At 100% speed the loop is sample-accurate (`AudioBufferSourceNode` loop). Below 100% it uses `<audio>` with `preservesPitch`, and the caption says that can leave a seam the real tool doesn't.
+    - Audio loads only on Play. Serve AAC (`.mp4`) where supported and Opus (`.ogg`) otherwise.
+    - Figure JS is ~1.8 KB brotli.
+    - RadioHound's figure (an FPGA-vs-software spectrum overlay) and the attestation figure are R3 candidates.
+  - **Expand in place:** entry details use native `<details>`.
+- **2026-10-24: R2, merged as PR 19.** Research and Projects are separate collections:
+  - `src/research/`, served at `/research/`; `src/projects/`, served at `/projects/`.
+  - RadioHound is past research.
+  - The `kind` field is gone. `detail` and `pi_signoff` are required on research and rejected on projects.
+  - Optional `lead: true`, at most one site-wide (checked by `check-content`). Passagework is the lead.
+- **Copy facts:**
+  - RadioHound role is "Undergraduate research assistant", period Jan–Nov 2026, to match the resume.
+  - RadioHound has `pi_signoff: false`. That's valid at high-level detail; don't change it to `true` without Michael confirming a sign-off.
+  - Remote attestation stack is Intel TDX, Google Cloud Platform, OpenSSL.
+
+## Next: R3, implement the R1 direction (one PR)
+
+1. **Spec amendments in `projectplan.md`:**
+   - §2: the motion rule above;
+   - §3: Broadsheet+ tokens, the lead story, the dateline tick, working figures, randomart on `/verify/`;
+   - §14: drop "Footer verification disclosure" or reword it, since randomart moved to `/verify/`.
+2. **Site styles and templates:** `site.css`, `masthead.njk`, `section-list.njk` and `entry.njk` per the sampler. The front page renders the `lead: true` entry as the lead story. Entries get kickers and `<details>` facts.
+3. **Dateline tick:** a small inline script with the final values already in the HTML, so it's correct with JS off and under reduced motion.
+4. **Passagework figure** on `/projects/passagework/`:
+   - Move the audio to `src/assets/media/`. Inline the peaks in the page.
+   - No-JS fallback: a static waveform image or a short caption.
+   - Script loaded only on that page.
+5. **`/verify/`:** randomart beside the fingerprint, computed at build time from `site.keyFingerprint` (not client JS).
+6. **Checks:**
+   - `check-budgets` passes. If any page exceeds 10 KB of JS, stop and ask.
+   - Add tests for the no-JS fallback, reduced motion, and the randomart matching `ssh-keygen` output.
+7. Refresh the preview artifact.
+
+## Open items
+
+- **Research entry copy:** Michael is writing it. Slots: the title, a summary of **≤ 20 words** (keeps the front page's first screen intact), Problem, What I built, Stack (body), Result, Links. Then draft `meta-research` from it, for approval.
+- **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` passes. Then work through the §13 launch checklist.
+- **Node:** bump `.nvmrc` and `engines.node` from 24.21.0 to 24.22.1 after 2026-11-03, once it's two weeks old. First check that no newer 24.x security release supersedes it. Keep that diff to the pin only.
+- **RadioHound:** Michael will revise the entry now that he's left the lab.
+- **Post-launch backlog:** spec §14.

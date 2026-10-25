@@ -4,3 +4,5 @@ drafts/
 .determinism/
 .DS_Store
 .wrangler/
+tools/copy-desk/copy-desk.html
+design/r1-sampler/out/
