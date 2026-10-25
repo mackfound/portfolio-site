@@ -9,11 +9,22 @@
   {% if target.data.contact %}{% include "contact.njk" %}{% endif %}
   <p class="section__more"><a href="{{ section.page }}">More →</a></p>
 {% else %}
+  {# The site's one `lead: true` entry, when it's in this section, leads it. #}
+  {% set entries = collections | sectionEntries(section) %}
+  {% for entry in entries %}{% if entry.data.lead %}
+  <ul class="entries lead">
+    {% include "entry.njk" %}
+  </ul>
+  {% endif %}{% endfor %}
+  {% set rest = [] %}
+  {% for entry in entries %}{% if not entry.data.lead %}{% set rest = (rest.push(entry), rest) %}{% endif %}{% endfor %}
+  {% if rest.length %}
   <ul class="entries">
-  {% for entry in collections | sectionEntries(section) %}
+  {% for entry in rest %}
     {% include "entry.njk" %}
   {% endfor %}
   </ul>
+  {% endif %}
   {% set indexUrl = section | sectionIndexUrl(collections.all) %}
   {% if indexUrl %}<p class="section__more"><a href="{{ indexUrl }}">All {{ section.label | lower }} →</a></p>{% endif %}
 {% endif %}

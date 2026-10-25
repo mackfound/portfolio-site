@@ -1,0 +1,9 @@
+{#- Passagework's working figure (projectplan.md §3). Without JS it's a static
+    waveform and the caption; the script swaps in a canvas you can play and loop,
+    and shows the controls. Audio loads only on Play. Expects `caption` in scope. -#}
+<figure class="fig" data-peaks="{{ passageworkPeaks | join(',') }}" data-duration="25" data-mp4="/assets/media/brahms4-iii.mp4" data-ogg="/assets/media/brahms4-iii.ogg">
+<div class="fig__stage">{{ passageworkPeaks | waveformSvg | safe }}</div>
+<div class="fig__bar" hidden><button type="button" class="fig__play">Play</button><label>Tempo <input type="range" class="fig__tempo" min="50" max="100" step="5" value="100"> <span class="fig__tv">100%</span></label><span class="fig__read"></span></div>
+<figcaption>{{ caption }}</figcaption>
+</figure>
+<script type="module" src="/assets/js/passagework-figure.js"></script>

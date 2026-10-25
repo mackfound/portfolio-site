@@ -1,6 +1,7 @@
 {# Index page for one collection (`indexCollection` in scope): its front-page
    section first, then past work. Group ids match section ids, so a front-page
    "All …" link can land on its group. #}
+{% set inIndex = true %}
 {% set groups = [] %}
 {% for section in sections %}{% if section.collection == indexCollection %}
   {% set groups = (groups.push({ id: section.id, label: "Current", collection: indexCollection, filter: section.filter }), groups) %}

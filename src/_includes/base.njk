@@ -25,5 +25,8 @@
     <p><a href="/resume/">Resume</a></p>
     <p class="attestation"><a href="/verify/">build {{ build.sha or "…" }} · signed {{ site.keyFingerprint or "…" }} · verify →</a></p>
   </footer>
+  {%- if page.url == "/" %}
+  {% include "dateline-tick.njk" %}
+  {%- endif %}
 </body>
 </html>

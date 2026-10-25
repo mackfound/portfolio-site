@@ -13,6 +13,9 @@ summary: "A browser tool for practicing musicians that loops a short passage of 
 description: "Passagework loops a passage of a recording while the sheet music stays on screen, from half speed to full, hands-free, for audition practice."
 ---
 
+{% set caption %}TODO-COPY(passagework-figure-caption){% endset %}
+{% include "passagework-figure.njk" %}
+
 ## Problem
 
 I’m a violinist preparing for orchestral auditions, and most of that prep is repetition: the same seven bars, over and over, against a real recording. A digital audio workstation (DAW) loops perfectly but wants a mouse and both hands. A media player is one keystroke away but can’t loop a passage, and slowing it down turns an orchestra to mud. I wanted to open a page, press one key, and have the passage loop while I kept playing.

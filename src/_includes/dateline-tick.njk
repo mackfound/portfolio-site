@@ -1,0 +1,22 @@
+{# The site's one ambient motion (projectplan.md §2, §3): on the front page, the
+   dateline's edition number and content hash resolve into place once on load.
+   The final values are already in the HTML, so nothing changes with JS off or
+   under reduced motion. #}
+<script type="module">
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const els = [...document.querySelectorAll(".dateline [data-tick]")];
+  const finals = els.map((el) => el.textContent);
+  const end = 3 * Math.max(...finals.map((f) => f.length));
+  const glyphs = (f) => (/^\d+$/.test(f) ? "0123456789" : "0123456789abcdef");
+  const scramble = (f, fixed) => f.slice(0, fixed)
+    + Array.from(f.slice(fixed), () => glyphs(f)[(Math.random() * glyphs(f).length) | 0]).join("");
+  let t = 0;
+  const timer = setInterval(() => {
+    els.forEach((el, i) => (el.textContent = scramble(finals[i], Math.floor(t / 3))));
+    if (++t > end) {
+      clearInterval(timer);
+      els.forEach((el, i) => (el.textContent = finals[i]));
+    }
+  }, 28);
+}
+</script>

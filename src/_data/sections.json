@@ -1,6 +1,6 @@
 [
-  { "id": "research", "label": "Research", "collection": "research", "filter": { "status": "current" }, "limit": 2, "show": true },
   { "id": "projects", "label": "Projects", "collection": "projects", "filter": { "status": "current" }, "limit": 3, "show": true },
+  { "id": "research", "label": "Research", "collection": "research", "filter": { "status": "current" }, "limit": 2, "show": true },
   { "id": "writing",  "label": "Writing",  "collection": "writing",  "limit": 5, "show": true },
   { "id": "notes",    "label": "Notes",    "collection": "notes",    "limit": 3, "show": false },
   { "id": "about",    "label": "About",    "page": "/about/",       "show": true }

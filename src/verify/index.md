@@ -20,10 +20,13 @@ Attestation is my central research focus, so why not apply its core idea, provin
 
 ## Signing key
 
+<div class="verify-key">
+{% if site.keyFingerprint %}<figure class="art"><pre aria-hidden="true">{{ site.keyFingerprint | randomart }}</pre><figcaption>Signing key · ED25519</figcaption></figure>{% endif %}
 <dl class="facts">
   <dt>Fingerprint</dt><dd><code>{{ fingerprint }}</code></dd>
   {% if site.links.github %}<dt>Also on</dt><dd><a href="{{ site.links.github }}">GitHub →</a></dd>{% endif %}
 </dl>
+</div>
 
 ## 1. Download the manifest and its signature
 

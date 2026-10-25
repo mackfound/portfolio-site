@@ -1,10 +1,24 @@
-{# One entry in any list (front page or index page). Expects `entry` in scope. #}
+{# One entry in any list (front page or index page). Expects `entry` in scope.
+   Projects and research get a status kicker and their facts behind a native
+   <details>; writing gets its outlet as the kicker and its date below. Index
+   pages (`inIndex`) drop the status word, which their group heads already say. #}
+{% set d = entry.data %}
 <li class="entry">
-  <h3 class="entry__title"><a href="{{ entry.data.url or entry.url }}">{{ entry.data.title }}</a></h3>
-  <p class="entry__meta">
-    {% if entry.data.outlet %}{{ entry.data.outlet }} · {% endif %}
-    {% if entry.data.date %}<time datetime="{{ entry.data.date | isoDate }}">{{ entry.data.date | displayDate }}</time>{% elif entry.data.period %}{{ entry.data.period }}{% endif %}
-    {% if entry.data.category %} · {{ entry.data.category }}{% endif %}
+  <p class="entry__kicker">
+    {%- if d.status %}{% if d.lead or not inIndex %}<span class="k">{% if d.lead %}Lead{% elif d.status == "current" %}Current{% else %}Past{% endif %}</span>{% endif %}{% if d.period %}<span>{{ d.period }}</span>{% endif %}
+    {%- else %}<span>{{ d.outlet }}{% if d.category %} · {{ d.category }}{% endif %}</span>{% endif -%}
   </p>
-  <p class="entry__summary">{{ entry.data.summary or entry.data.deck }}</p>
+  <h3 class="entry__title"><a href="{{ d.url or entry.url }}">{{ d.title }}</a></h3>
+  {% if d.date %}<p class="entry__meta"><time datetime="{{ d.date | isoDate }}">{{ d.date | displayDate }}</time></p>{% endif %}
+  <p class="entry__summary">{{ d.summary or d.deck }}</p>
+  {% if d.role %}
+  <details class="more"><summary>Details</summary>
+    <dl class="facts">
+      <dt>Role</dt><dd>{{ d.role }}</dd>
+      <dt>Stack</dt><dd>{{ d.stack | join(", ") }}</dd>
+      {% if d.links.live %}<dt>Live</dt><dd><a href="{{ d.links.live }}">{{ d.links.live | replace("https://", "") }}</a></dd>{% endif %}
+      {% if d.links.source %}<dt>Source</dt><dd><a href="{{ d.links.source }}">{{ d.links.source | replace("https://", "") }}</a></dd>{% endif %}
+    </dl>
+  </details>
+  {% endif %}
 </li>
