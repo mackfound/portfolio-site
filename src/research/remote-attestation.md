@@ -2,9 +2,9 @@
 title: TODO-COPY(project-remote-attestation-title)
 status: current
 order: 1
-period: TODO-COPY(project-remote-attestation-period)
-role: TODO-COPY(project-remote-attestation-role)
-stack: [TODO-COPY(project-remote-attestation-stack)]
+period: Aug 2026 – present
+role: Undergraduate research assistant, Data Security and Privacy Lab (Prof. Taeho Jung)
+stack: [Intel TDX, Google Cloud Platform, OpenSSL]
 summary: TODO-COPY(project-remote-attestation-summary)
 detail: high-level
 pi_signoff: false
