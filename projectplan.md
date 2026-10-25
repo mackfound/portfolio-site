@@ -39,7 +39,7 @@ Do not build any of these. If one seems necessary, stop and ask.
 - No archive of previous site versions.
 - No contact form. Contact is an email address and profile links.
 - No dark-mode toggle. The site follows the visitor's system setting through CSS.
-- No scroll-driven animation, parallax, fade-in-on-scroll, or layout animation.
+- No motion that doesn't answer the visitor. Motion responds to hover, focus, click, drag, or navigation, with **exactly one ambient element**: the front page's dateline tick (section 3). Nothing is scroll-triggered: no scroll-driven animation, parallax, or fade-in-on-scroll. All motion is off under `prefers-reduced-motion`, and every page fully works with JavaScript disabled. (Amended at R1, 2026-10-24.)
 - No client-side framework (React, Vue, Svelte, etc.).
 - No CSS framework (Tailwind, Bootstrap, etc.).
 - No analytics script. Traffic data comes from Cloudflare zone-level stats only.
@@ -62,6 +62,15 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 - **Late Edition:** in dark mode, the dateline reads "Late Edition", appended to the left side (`Vol. V · No. N · Late Edition`); the date stays visible. This is CSS-only, using `prefers-color-scheme` and a `::after` or visibility swap. No JavaScript.
 
 **Attested (signature).** Every page footer carries the short source commit SHA, the signing key fingerprint, and a link to `/verify/`. The signing pipeline is specified in section 9.
+
+**Broadsheet+ (amended at R1, 2026-10-24).** The edition concept, committed to:
+- **Masthead:** bigger on the front page (`clamp(3.5rem, 17vw, 8rem)`). Section heads sit under 3 px rules.
+- **Kickers:** a small caps line above each entry title. Projects and research show their status (`Lead`, `Current`, `Past`) and period; writing shows outlet and category. Index pages drop the status word, since their group heads already say it.
+- **Lead story:** the one entry with `lead: true` (checked by `check-content`) leads its front-page section, set larger.
+- **Expand in place:** an entry's facts (role, stack, links) sit in a native `<details>` on lists.
+- **Dateline tick:** on the front page only, the dateline also shows `sha256` plus the first 16 hex digits of `edition.contentHash`. Once on load, the edition number and hash resolve into place, left to right. The final values are in the HTML, so the page is correct with JavaScript off or reduced motion on. This is the site's one ambient motion (section 2).
+- **Working figures:** at most one per entry page, on that page only. Its script and media load on that page alone, and media loads only on interaction. Without JavaScript it shows a static rendering and its caption. Passagework's figure loops the opening 25 s of Brahms, Symphony No. 4, III (Musopen, CC0).
+- **Randomart:** the signing key's fingerprint drawn as OpenSSH randomart, identical to `ssh-keygen -lv`, rendered at build time. It appears **only on `/verify/`**, beside the fingerprint.
 
 ### Edition numbering
 
@@ -100,8 +109,8 @@ Sections 3–7 render from `sections.json` in configured order. The order above 
 ### Color and theme
 
 - All colors are CSS custom properties on `:root`, redefined under `@media (prefers-color-scheme: dark)`.
-- **Light:** warm off-white paper, near-black ink, one muted accent for links.
-- **Dark:** deep ink background, warm light text, the same accent adjusted for contrast.
+- **Light:** newsprint paper `#f3f2ee`, ink `#121212`, press red `#c8102e` as the one accent.
+- **Dark:** paper `#121211`, ink `#ecebe6`, accent `#ff7a70`. (Amended at R1, 2026-10-24; full tokens in `src/assets/css/site.css`.)
 - Both themes must meet WCAG AA contrast.
 
 ### Layout
@@ -468,7 +477,7 @@ These are not in launch scope. Each needs its own review.
 
 - **Notes:** the first post, then flip `notes.show` to `true`.
 - **In-browser verification:** a Web Crypto "verify this page" button. Expect a budget flag.
-- **Footer verification disclosure:** an info icon on the footer attestation line that opens Michael's explanation, `TODO-COPY(footer-attestation-explainer)`: what the line is, what it does, and why it's there. Alongside it, all the verification details: the full commit SHA, the full key fingerprint, links to `manifest.txt` and `manifest.txt.sig`, and the `/verify/` commands. It should work with JavaScript disabled (e.g. a native `<details>`/`<summary>` disclosure, no script), so it adds nothing to the JS budget. Open question for its review: does it replace the `/verify/` link or sit beside it? It also covers explaining how to check pages other than the front page (raised at the P3 gate).
+- **Footer verification disclosure:** an info icon on the footer attestation line that opens Michael's explanation, `TODO-COPY(footer-attestation-explainer)`: what the line is, what it does, and why it's there. Alongside it, all the verification details: the full commit SHA, the full key fingerprint, links to `manifest.txt` and `manifest.txt.sig`, and the `/verify/` commands. It should work with JavaScript disabled (e.g. a native `<details>`/`<summary>` disclosure, no script), so it adds nothing to the JS budget. Open question for its review: does it replace the `/verify/` link or sit beside it? It also covers explaining how to check pages other than the front page (raised at the P3 gate). The randomart stays on `/verify/` (section 3), not in this disclosure.
 - **Reproducible builds:** publish build instructions so anyone can rebuild from source and match the manifest. Determinism is already enforced, so this is mostly documentation plus a CI rebuild check.
 - **Commit signing:** sign git commits with the same key under the `git` namespace.
 - **Deeper research write-up:** only with `pi_signoff: true`.

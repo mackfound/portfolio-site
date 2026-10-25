@@ -2,6 +2,7 @@
 
 import { readFileSync } from "node:fs";
 import rssPlugin from "@11ty/eleventy-plugin-rss";
+import { randomart } from "./scripts/lib/randomart.js";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July",
   "August", "September", "October", "November", "December"];
@@ -44,6 +45,22 @@ export default function (eleventyConfig) {
     }
     return entries.slice(0, section.limit);
   });
+
+  // Static waveform for a working figure's no-JS view: peaks (0–1) reduced to
+  // `bars` bars, each the max of its slice, drawn as one SVG path.
+  eleventyConfig.addFilter("waveformSvg", (peaks, bars = 300) => {
+    const per = peaks.length / bars;
+    let d = "";
+    for (let i = 0; i < bars; i++) {
+      const v = Math.max(...peaks.slice(Math.floor(i * per), Math.floor((i + 1) * per)));
+      const h = Math.max(1, v * 88);
+      d += `M${i} ${((100 - h) / 2).toFixed(1)}h.7v${h.toFixed(1)}h-.7z`;
+    }
+    return `<svg class="fig__wave" viewBox="0 0 ${bars} 100" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="currentColor"/></svg>`;
+  });
+
+  // The signing key's fingerprint as OpenSSH randomart, for /verify/ (computed at build time).
+  eleventyConfig.addFilter("randomart", (fingerprint) => randomart(fingerprint));
 
   eleventyConfig.addFilter("pageByUrl", (pages, url) => pages.find((p) => p.url === url));
 

@@ -77,7 +77,7 @@ test("research and projects are separate pages, each listing only its own entrie
     assert.deepEqual([...listed].sort(), expected.sort(), `/${own}/ lists every ${own} entry`);
     assert.equal(links(`${own}/index.html`, other).size, 0, `/${own}/ lists no ${other} entries`);
   }
-  assert.match(html("index.html"), /<nav class="index-strip"[^>]*>\s*<a href="\/research\/">Research<\/a>/);
+  assert.match(html("index.html"), /<nav class="index-strip"[^>]*>\s*<a href="\/projects\/">Projects<\/a> · <a href="\/research\/">Research<\/a>/);
 });
 
 test("the notes feed is dated from content or the edition, never the build time", () => {
@@ -134,4 +134,29 @@ test("text and link tokens meet WCAG AA (4.5:1) on paper in both themes", () => 
       assert.ok(ratio >= 4.5, `${theme}: --${fg} on --paper is ${ratio.toFixed(2)}:1`);
     }
   }
+});
+
+// Motion and JS (projectplan.md §2): only the front page (dateline tick) and the
+// Passagework page (working figure) ship scripts, and both work without them.
+test("only the front page and the Passagework page ship scripts", () => {
+  const withScripts = pages.filter(({ html }) => /<script\b/i.test(html)).map(({ path }) => path).sort();
+  assert.deepEqual(withScripts, ["index.html", "projects/passagework/index.html"]);
+});
+
+test("the dateline holds its final values in the HTML, and the tick respects reduced motion", () => {
+  const home = pages.find((p) => p.path === "index.html").html;
+  const edition = JSON.parse(readFileSync(join(ROOT, "src/_data/edition.json"), "utf8"));
+  assert.match(home, new RegExp(`No\\. <span data-tick>${edition.number}</span>`));
+  if (edition.contentHash) assert.ok(home.includes(`<span data-tick>${edition.contentHash.slice(0, 16)}</span>`));
+  assert.match(home, /<script type="module">\s*if \(!matchMedia\("\(prefers-reduced-motion: reduce\)"\)\.matches\)/);
+  const css = readFileSync(join(out, "assets/css/site.css"), "utf8");
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{\s*\*, \*::before, \*::after \{ transition: none !important; animation: none !important; \}/);
+});
+
+test("the Passagework figure works without JS: static waveform, controls hidden, audio not preloaded", () => {
+  const html = pages.find((p) => p.path === "projects/passagework/index.html").html;
+  assert.match(html, /<div class="fig__stage"><svg class="fig__wave"[^>]*><path d="M0 /);
+  assert.match(html, /<div class="fig__bar" hidden>/);
+  assert.doesNotMatch(html, /<audio\b|<source\b/, "audio loads only on Play");
+  assert.match(html, /<script type="module" src="\/assets\/js\/passagework-figure\.js"><\/script>/);
 });

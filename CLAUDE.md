@@ -35,7 +35,7 @@ These are private to Michael. To update one from a new session, read it by URL, 
 
 - Copy Desk (copy slot tracker; checkbox state lives in its database): https://claude.ai/artifact/WHLBgTAuCHPRjbUiCvAUyv
 - Site preview (static build, links relinked): https://claude.ai/artifact/6sP9zuxfNuWyGU81JHcAwA. The artifact host wraps the main page in its own skeleton, so the preview's `index.html` carries a one-rule `body` font/color override.
-- R1 design sampler (the approved direction): https://claude.ai/artifact/Kuz8evYrFzCLi26KVwRJL7. Publish `out/vol-v-directions.html` with `brahms4-iii.mp4` and `brahms4-iii.ogg` in `files`.
+- R1 design sampler (the approved direction): https://claude.ai/artifact/Kuz8evYrFzCLi26KVwRJL7. Publish `out/vol-v-directions.html` with `brahms4-iii.mp4` and `brahms4-iii.ogg` (now in `src/assets/media/`) in `files`.
 
 ## Decisions since the spec (newest last)
 
@@ -51,7 +51,7 @@ These are private to Michael. To update one from a new session, read it by URL, 
   - **Motion rule** (replaces spec §2's motion ban; write it into the spec in R3): motion only answers the visitor (hover, focus, click, drag, navigation), plus **exactly one ambient element**. Nothing is scroll-triggered. Honor `prefers-reduced-motion`. Every page fully works with JS off.
   - **Ambient element: the dateline tick.** The edition number and content hash resolve into place once on load.
   - **Randomart:** the signing-key fingerprint drawn as OpenSSH randomart (drunken bishop; verified identical to `ssh-keygen -lv`). It is static and lives **only on `/verify/`**, beside the fingerprint. It is not in the masthead or the footer.
-  - **Working figures:** at most one per entry page. Passagework's figure loops a real recording: the opening 25 s of Brahms Symphony No. 4, III (Musopen, CC0; see `design/r1-sampler/CREDITS`).
+  - **Working figures:** at most one per entry page. Passagework's figure loops a real recording: the opening 25 s of Brahms Symphony No. 4, III (Musopen, CC0; see `src/assets/media/CREDITS.txt`).
     - At 100% speed the loop is sample-accurate (`AudioBufferSourceNode` loop). Below 100% it uses `<audio>` with `preservesPitch`, and the caption says that can leave a seam the real tool doesn't.
     - Audio loads only on Play. Serve AAC (`.mp4`) where supported and Opus (`.ogg`) otherwise.
     - Figure JS is ~1.8 KB brotli.
@@ -67,28 +67,23 @@ These are private to Michael. To update one from a new session, read it by URL, 
   - RadioHound has `pi_signoff: false`. That's valid at high-level detail; don't change it to `true` without Michael confirming a sign-off.
   - Remote attestation stack is Intel TDX, Google Cloud Platform, OpenSSL.
 
-## Next: R3, implement the R1 direction (one PR)
-
-1. **Spec amendments in `projectplan.md`:**
-   - §2: the motion rule above;
-   - §3: Broadsheet+ tokens, the lead story, the dateline tick, working figures, randomart on `/verify/`;
-   - §14: drop "Footer verification disclosure" or reword it, since randomart moved to `/verify/`.
-2. **Site styles and templates:** `site.css`, `masthead.njk`, `section-list.njk` and `entry.njk` per the sampler. The front page renders the `lead: true` entry as the lead story. Entries get kickers and `<details>` facts.
-3. **Dateline tick:** a small inline script with the final values already in the HTML, so it's correct with JS off and under reduced motion.
-4. **Passagework figure** on `/projects/passagework/`:
-   - Move the audio to `src/assets/media/`. Inline the peaks in the page.
-   - No-JS fallback: a static waveform image or a short caption.
-   - Script loaded only on that page.
-5. **`/verify/`:** randomart beside the fingerprint, computed at build time from `site.keyFingerprint` (not client JS).
-6. **Checks:**
-   - `check-budgets` passes. If any page exceeds 10 KB of JS, stop and ask.
-   - Add tests for the no-JS fallback, reduced motion, and the randomart matching `ssh-keygen` output.
-7. Refresh the preview artifact.
+- **2026-10-25: R3 scope.** Michael chose:
+  - The dateline tick runs on the **front page only**. Inner pages keep a static dateline and ship no JS.
+  - The Passagework figure lives on **`/projects/passagework/` only**. The front-page lead has no player.
+  - **Projects (with the lead) come before Research** on the front page, per spec §3.
+- **2026-10-25: R3 built.** Structure, for future changes:
+  - Tokens and styles are in `site.css`; the sampler is the reference, not a source.
+  - `entry.njk` renders kickers and `<details>` facts; `section-list.njk` puts the `lead: true` entry first.
+  - The tick is `src/_includes/dateline-tick.njk`, included by `base.njk` on `/` only. Values marked `data-tick` are already final in the HTML.
+  - The figure is `src/_includes/passagework-figure.njk` plus `src/assets/js/passagework-figure.js`. Peaks are in `src/_data/passageworkPeaks.json`; the `waveformSvg` filter draws the no-JS waveform.
+  - Randomart is `scripts/lib/randomart.js`, rendered by the `randomart` filter on `/verify/`, and tested against `ssh-keygen -lv` with throwaway keys.
+  - Pages with JS need a `budget-exceptions.json` entry, and only Michael adds those (spec §8).
 
 ## Open items
 
-- **Research entry copy:** Michael is writing it. Slots: the title, a summary of **≤ 20 words** (keeps the front page's first screen intact), Problem, What I built, Stack (body), Result, Links. Then draft `meta-research` from it, for approval.
-- **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` passes. Then work through the §13 launch checklist.
+- **Budget exceptions for R3:** Michael adds the two JS entries (`/` and `/projects/passagework/`) to `budget-exceptions.json`. Until then `check-budgets`, and so `npm test`, fails with those flags.
+- **Figure caption:** `TODO-COPY(passagework-figure-caption)` in `src/projects/passagework.md`. Michael writes it: credit the recording, explain the controls, and say that below 100% the browser can leave a seam the real tool doesn't.
+- **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` and `npm test` pass. Then work through the §13 launch checklist.
 - **Node:** bump `.nvmrc` and `engines.node` from 24.21.0 to 24.22.1 after 2026-11-03, once it's two weeks old. First check that no newer 24.x security release supersedes it. Keep that diff to the pin only.
 - **RadioHound:** Michael will revise the entry now that he's left the lab.
 - **Post-launch backlog:** spec §14.

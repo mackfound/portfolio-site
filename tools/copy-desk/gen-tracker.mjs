@@ -40,6 +40,7 @@ function kindFor(name, field) {
   if (/^(home-positioning|home-standing)$/.test(name)) return "Front page line";
   if (name === "about-bio") return "Bio";
   if (name === "verify-explainer") return "Explainer";
+  if (name.endsWith("-figure-caption")) return "Figure caption";
   return "Project body";
 }
 const HINTS = {
@@ -56,6 +57,7 @@ const HINTS = {
   "Front page line": "On the first phone screen: the ten-second test.",
   "Bio": "The full About page.",
   "Explainer": "What verification proves and why it's here, above the commands.",
+  "Figure caption": "Under the working figure. Credit the recording (Brahms 4, III; Musopen, CC0), say how to use the controls, and say that below 100% the browser's playback can leave a seam the real tool doesn't.",
   "Project body": "One section of Problem · What I built · Stack · Result · Links.",
 };
 

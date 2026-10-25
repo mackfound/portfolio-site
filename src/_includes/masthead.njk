@@ -1,12 +1,14 @@
-{# The front page gets the full nameplate (as its h1) and the standing line;
-   inner pages get a compact masthead and keep their own h1. #}
+{# The front page gets the full nameplate (as its h1), the standing line, and
+   the content hash in the dateline; inner pages get a compact masthead and keep
+   their own h1. `data-tick` marks the values the front page's tick resolves. #}
 {% set front = page.url == "/" %}
 <header class="masthead{% if not front %} masthead--compact{% endif %}">
   {% if front %}<h1 class="masthead__name">{{ site.name }}</h1>{% else %}<p class="masthead__name"><a href="/">{{ site.name }}</a></p>{% endif %}
   {% if front %}<p class="masthead__standing">Notre Dame · Computer Engineering · Class of 2029</p>{% endif %}
   <p class="dateline">
-    <span>Vol. V · No. {{ edition.number }}<span class="dateline__late"> · Late Edition</span></span>
+    <span>Vol. V · No. <span data-tick>{{ edition.number }}</span><span class="dateline__late"> · Late Edition</span></span>
     {% if edition.date %}<time datetime="{{ edition.date }}">{{ edition.date | displayDate }}</time>{% endif %}
+    {% if front and edition.contentHash %}<span class="dateline__hash">sha256 <span data-tick>{{ edition.contentHash | truncate(16, true, "") }}</span></span>{% endif %}
   </p>
   <nav class="index-strip" aria-label="Sections">
     {% for section in sections %}{% if section.show %}<a href="{{ section.page or (section | sectionIndexUrl(collections.all)) or ('/#' + section.id) }}">{{ section.label }}</a> · {% endif %}{% endfor %}<a href="/resume/">Resume</a>
