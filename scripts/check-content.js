@@ -3,7 +3,7 @@
 // Eleventy itself, so it is parsed exactly as the build parses it.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import Eleventy from "@11ty/eleventy";
-import { validateEntry, validateSections } from "./lib/content-schema.js";
+import { validateEntry, validateLead, validateSections } from "./lib/content-schema.js";
 
 const sections = JSON.parse(readFileSync("src/_data/sections.json", "utf8"));
 const folders = new Set(readdirSync("src", { withFileTypes: true })
@@ -31,14 +31,16 @@ const eleventy = new Eleventy(undefined, undefined, {
 });
 await eleventy.toJSON();
 
-let count = 0;
+const entries = [];
 for (const name of collections) {
   for (const item of items.filter((i) => i.inputPath.startsWith(`./src/${name}/`) && i.inputPath.endsWith(".md"))) {
     const { data } = await item.template.getFrontMatterData();
-    errors.push(...validateEntry({ path: item.inputPath.slice(2), collection: name, data }));
-    count++;
+    entries.push({ path: item.inputPath.slice(2), collection: name, data });
   }
 }
+for (const entry of entries) errors.push(...validateEntry(entry));
+errors.push(...validateLead(entries));
+const count = entries.length;
 
 if (errors.length) {
   console.error(`check-content: ${errors.length} problem(s)`);

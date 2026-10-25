@@ -76,8 +76,8 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 
 1. Masthead (left-aligned), standing line `TODO-COPY(home-standing)` with school and year, dateline, and an index strip of section links plus Resume (generated from `sections.json`).
 2. Positioning line: one sentence, `TODO-COPY(home-positioning)`.
-3. Lead stories: projects with `status: current`, `kind: project`, ordered by `order`.
-4. Research: projects with `status: current`, `kind: research`.
+3. Lead stories: projects with `status: current`, ordered by `order`.
+4. Research: research entries with `status: current`.
 5. Writing: the latest entries, with a link to all.
 6. Notes: hidden at launch (`show: false` in `sections.json`).
 7. About: a short blurb linking to the full page. Includes the contact line.
@@ -169,7 +169,8 @@ All dependencies use exact versions with no ranges. Pick versions at least two w
    │  ├─ fonts/               # Source Serif 4 WOFF2 subsets
    │  └─ media/               # resume PDF, images
    ├─ index.njk               # front page
-   ├─ projects/               # one .md per project or research entry
+   ├─ research/               # one .md per research entry
+   ├─ projects/               # one .md per project
    ├─ writing/                # one .md per published piece (metadata only)
    ├─ notes/                  # one .md per post (hidden section at launch)
    ├─ about/index.md
@@ -186,8 +187,8 @@ All dependencies use exact versions with no ranges. Pick versions at least two w
 
 ```json
 [
-  { "id": "projects", "label": "Projects", "collection": "projects", "filter": { "kind": "project", "status": "current" }, "limit": 3, "show": true },
-  { "id": "research", "label": "Research", "collection": "projects", "filter": { "kind": "research", "status": "current" }, "limit": 2, "show": true },
+  { "id": "research", "label": "Research", "collection": "research", "filter": { "status": "current" }, "limit": 2, "show": true },
+  { "id": "projects", "label": "Projects", "collection": "projects", "filter": { "status": "current" }, "limit": 3, "show": true },
   { "id": "writing",  "label": "Writing",  "collection": "writing",  "limit": 5, "show": true },
   { "id": "notes",    "label": "Notes",    "collection": "notes",    "limit": 3, "show": false },
   { "id": "about",    "label": "About",    "page": "/about/",       "show": true }
@@ -198,13 +199,12 @@ All dependencies use exact versions with no ranges. Pick versions at least two w
 - **Generic renderer:** `section-list.njk` renders any registered section.
 - **Validation:** `check-content.js` validates this file against a schema.
 
-### Projects: `src/projects/*.md`
+### Projects and research: `src/projects/*.md`, `src/research/*.md`
 
 ```yaml
 title: Passagework
-kind: project            # project | research
 status: current          # current | past
-order: 1                 # front-page ordering within kind+status
+order: 1                 # ordering within collection+status
 period: Jul–Aug 2026
 role: Sole developer
 stack: [TypeScript, Vite, AudioWorklet]
@@ -213,21 +213,23 @@ links:
   source: https://github.com/mackfound/passagework
 summary: TODO-COPY(project-passagework-summary)
 description: …           # optional meta description; falls back to summary
-detail: high-level       # research only: high-level | deep
-pi_signoff: false        # research only
+lead: true               # optional; at most one entry site-wide (the front-page lead story)
+detail: high-level       # research only, required: high-level | deep
+pi_signoff: false        # research only, required
 ```
 
 - **Body:** every project body uses the same headings: Problem · What I built · Stack · Result · Links. Each body section starts as `TODO-COPY(<slug>-<section>)`.
-- **Projects index:** `/projects/` lists `current` first, then a "Past work" group for `status: past`.
+- **Index pages:** `/research/` and `/projects/` are separate pages. Each lists its `current` entries first, then a "Past" group for `status: past`. Entry pages live at `/research/<slug>/` and `/projects/<slug>/` (split approved in the R2 review, 2026-10-24).
+- **Lead:** `check-content.js` fails if more than one entry, across both collections, sets `lead: true`.
 - **Research guardrail:** a research entry with `detail: deep` **MUST** have `pi_signoff: true`, or `check-content.js` fails the build. Launch content is `detail: high-level` only.
 
 **Seed entries.** Create these; Michael writes the copy.
 
-| File | kind | status | Notes |
+| File | collection | status | Notes |
 |---|---|---|---|
-| `passagework.md` | project | current | Links and stack as above |
+| `passagework.md` | projects | current | Links and stack as above; `lead: true` |
 | `remote-attestation.md` | research | current | DSP lab, high-level only |
-| `radiohound.md` | project | past | RadioHound: Amaranth HDL (Python → Verilog) in the spring, a spectrum-verification harness in the fall |
+| `radiohound.md` | research | past | RadioHound: Amaranth HDL (Python → Verilog) in the spring, a spectrum-verification harness in the fall |
 
 ### Writing: `src/writing/*.md`
 
@@ -446,7 +448,7 @@ Claude Code **MUST stop and ask** before:
 
 ## 13. Launch checklist
 
-- [ ] Launch pages exist and render: front page, `/projects/` (plus details), `/writing/`, `/about/` (with contact), `/resume/` (HTML plus PDF), `/verify/`, `/404`.
+- [ ] Launch pages exist and render: front page, `/research/` and `/projects/` (plus details), `/writing/`, `/about/` (with contact), `/resume/` (HTML plus PDF), `/verify/`, `/404`.
 - [ ] Zero `TODO-COPY` slots remain.
 - [ ] `npm test` passes; `check-determinism.sh` is byte-identical.
 - [ ] Front page passes the ten-second test on a real phone.
