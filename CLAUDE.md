@@ -81,7 +81,6 @@ These are private to Michael. To update one from a new session, read it by URL, 
 
 ## Open items
 
-- **Budget exceptions for R3:** Michael adds the two JS entries (`/` and `/projects/passagework/`) to `budget-exceptions.json`. Until then `check-budgets`, and so `npm test`, fails with those flags.
 - **Figure caption:** `TODO-COPY(passagework-figure-caption)` in `src/projects/passagework.md`. Michael writes it: credit the recording, explain the controls, and say that below 100% the browser can leave a seam the real tool doesn't.
 - **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` and `npm test` pass. Then work through the §13 launch checklist.
 - **Node:** bump `.nvmrc` and `engines.node` from 24.21.0 to 24.22.1 after 2026-11-03, once it's two weeks old. First check that no newer 24.x security release supersedes it. Keep that diff to the pin only.
