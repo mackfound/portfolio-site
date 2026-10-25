@@ -18,7 +18,7 @@ const banner = `<div style="font:12px/1.4 system-ui,sans-serif;background:var(--
 for (const f of files) {
   if (f.endsWith(".html")) {
     let s = readFileSync(join(root, f), "utf8");
-    s = s.replace(/\b(href|src)="(\/(?!\/)[^"]*)"/g, (_, a, u) => `${a}="${rel(f, u)}"`);
+    s = s.replace(/\b(href|src|data-[a-z0-9-]+)="(\/(?!\/)[^"]*)"/g, (_, a, u) => `${a}="${rel(f, u)}"`);
     s = s.replace(/(<body[^>]*>)/, `$1${banner}`);
     writeFileSync(join(root, f), s);
   } else if (f.endsWith(".css")) {
