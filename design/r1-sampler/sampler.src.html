@@ -1,0 +1,378 @@
+<title>Vol. V Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Broadsheet+ front page with its lead story and working figure; a /verify/ mock below holds the randomart.
+   Fonts are the site's own (Doyle Serif + Source Serif italic), embedded; sans and mono are system stacks, as in the spec. */
+@font-face { font-family: "Doyle Serif"; src: url(data:font/woff2;base64,%%ROMAN%%) format("woff2"); font-weight: 400 500; font-style: normal; font-display: block; }
+@font-face { font-family: "Doyle Serif"; src: url(data:font/woff2;base64,%%ITALIC%%) format("woff2"); font-weight: 400; font-style: italic; font-display: block; }
+
+:root {
+  --serif: "Doyle Serif", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  /* A: Broadsheet+ (light) */
+  --paper: #f3f2ee; --ink: #121212; --muted: #5d5d58; --rule: #c9c7bf; --accent: #c8102e; --tint: rgba(200,16,46,.07);
+  --bar: #e7e6e0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #121211; --ink: #ecebe6; --muted: #a3a29b; --rule: #34332f; --accent: #ff7a70; --tint: rgba(255,122,112,.09); --bar: #1d1d1b; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #121211; --ink: #ecebe6; --muted: #a3a29b; --rule: #34332f; --accent: #ff7a70; --tint: rgba(255,122,112,.09); --bar: #1d1d1b; color-scheme: dark; }
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 1.125rem/1.55 var(--serif); font-optical-sizing: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 3rem;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bar); }
+a { color: var(--accent); text-underline-offset: .15em; text-decoration-thickness: 1px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, canvas:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-weight: 500; line-height: 1.15; text-wrap: balance; margin: 0; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- Sampler controls (not part of the site) ---------- */
+.ctl {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin: 0 calc(-1 * max(16px, env(safe-area-inset-right, 0px))) 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: .5rem max(16px, env(safe-area-inset-right, 0px)) .5rem max(16px, env(safe-area-inset-left, 0px));
+  background: var(--bar); border-bottom: 1px solid var(--rule);
+  font: 13px/1.3 var(--sans); display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; align-items: center;
+}
+.ctl__group { display: flex; gap: .25rem; align-items: center; flex-wrap: wrap; }
+.ctl__label { color: var(--muted); margin-right: .25rem; letter-spacing: .06em; text-transform: uppercase; font-size: 11px; }
+.ctl button { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--rule); border-radius: 3px; padding: .3rem .6rem; cursor: pointer; }
+.ctl button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.ctl__note { color: var(--muted); flex-basis: 100%; }
+
+.site { max-width: 72rem; margin: 0 auto; }
+
+/* ---------- Shared site structure ---------- */
+.mast { padding-top: 2rem; display: grid; gap: .5rem 1.5rem; grid-template-columns: minmax(0, 1fr); }
+.mast__name { font-size: clamp(3rem, 14vw, 6.5rem); line-height: .95; letter-spacing: -.01em; font-weight: 500; }
+.mast__standing { margin: 0; color: var(--muted); font-style: italic; }
+.dateline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 1rem; margin: .75rem 0 0; padding: .4rem 0; font: .75rem/1.5 var(--sans); letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.dateline .hash { text-transform: none; letter-spacing: 0; font-family: var(--mono); }
+.index { padding: .5rem 0; border-bottom: 1px solid var(--rule); font: .8125rem/1.5 var(--sans); letter-spacing: .04em; display: flex; flex-wrap: wrap; gap: .25rem .9rem; }
+.index a { color: var(--ink); text-decoration: none; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size .2s ease, color .2s ease; }
+.index a:hover, .index a:focus-visible { color: var(--accent); background-size: 100% 1px; }
+.art { margin: 0; }
+.art pre { margin: 0; font: 12px/1.15 var(--mono); color: var(--ink); }
+.art figcaption { font: .6875rem/1.3 var(--sans); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: .35rem; }
+.slot { color: var(--muted); font-style: italic; border-left: 2px solid var(--accent); padding-left: .75rem; margin: 0; max-width: 60ch; }
+
+/* Placement 1: the /verify/ page. */
+.verify { margin-top: 3rem; padding-top: 1rem; border-top: 3px solid var(--ink); }
+.verify__tag { font: .6875rem/1.5 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 .5rem; }
+.verify h2 { font-size: clamp(2rem, 7vw, 3rem); margin-bottom: 1rem; }
+.verify h3 { font-size: 1.375rem; margin: 1.5rem 0 .5rem; }
+.verify__key { display: grid; gap: 1rem 2rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.verify ol { margin: 1.5rem 0 0; padding-left: 1.25rem; color: var(--muted); }
+.verify p { max-width: 65ch; }
+.positioning { max-width: 65ch; margin: 1.5rem 0 0; font-size: 1.375rem; line-height: 1.35; }
+
+.section { margin-top: 2.5rem; }
+.section__head { margin: 0 0 1rem; padding-top: .4rem; border-top: 1px solid var(--ink); font: 600 .75rem/1.5 var(--sans); letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: space-between; gap: 1rem; }
+.section__head .count { color: var(--muted); font-weight: 400; }
+.entries { list-style: none; margin: 0; padding: 0; }
+.entry { position: relative; padding: 1rem 0; border-top: 1px solid var(--rule); }
+.entry:first-child { border-top: 0; padding-top: 0; }
+.entry__kicker { font: .6875rem/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 .25rem; transition: color .2s ease; display: flex; gap: .6rem; align-items: baseline; }
+.entry__title { font-size: 1.5rem; }
+.entry__title a { color: inherit; text-decoration: none; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size .25s ease, color .2s ease; }
+.entry:hover .entry__title a, .entry__title a:focus-visible { color: var(--accent); background-size: 100% 1px; }
+.entry:hover .entry__kicker { color: var(--accent); }
+.entry__meta { margin: .25rem 0 0; color: var(--muted); font-size: .9375rem; font-variant-numeric: tabular-nums; }
+.entry__summary { max-width: 65ch; margin: .5rem 0 0; }
+.pending { color: var(--muted); font-style: italic; }
+
+/* In-place expansion: native <details>, animated where the browser supports it. */
+.more { margin-top: .5rem; font-size: .9375rem; }
+.more summary { cursor: pointer; color: var(--muted); font: .75rem/1.5 var(--sans); letter-spacing: .06em; text-transform: uppercase; list-style: none; display: inline-flex; gap: .4rem; align-items: center; }
+.more summary::-webkit-details-marker { display: none; }
+.more summary::before { content: "+"; font-family: var(--mono); display: inline-block; width: 1ch; transition: transform .2s ease; }
+.more[open] summary::before { transform: rotate(45deg); }
+.more summary:hover { color: var(--accent); }
+.more::details-content { block-size: 0; overflow: clip; transition: block-size .25s ease, content-visibility .25s allow-discrete; }
+.more[open]::details-content { block-size: auto; }
+:root { interpolate-size: allow-keywords; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .2rem 1rem; margin: .5rem 0 0; padding: .5rem 0; border-block: 1px solid var(--rule); }
+.facts dt { font: .6875rem/1.9 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------- Working figure ---------- */
+.fig { margin: 1rem 0 0; max-width: 46rem; }
+.fig__stage { position: relative; border: 1px solid var(--rule); background: var(--tint); touch-action: none; }
+.fig canvas { display: block; width: 100%; height: 132px; cursor: ew-resize; }
+.fig__bar { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; margin-top: .5rem; font: .8125rem/1.4 var(--sans); }
+.fig__bar button { font: inherit; color: var(--paper); background: var(--ink); border: 0; border-radius: 3px; padding: .35rem .8rem; cursor: pointer; min-width: 5.5rem; }
+.fig__bar label { display: inline-flex; gap: .5rem; align-items: center; color: var(--muted); }
+.fig__bar input[type=range] { accent-color: var(--accent); width: 9rem; }
+.fig__read { color: var(--muted); font-family: var(--mono); font-size: .75rem; font-variant-numeric: tabular-nums; }
+.fig figcaption { color: var(--muted); font-size: .875rem; margin-top: .4rem; max-width: 65ch; }
+.fig kbd { font-family: var(--mono); font-size: .75rem; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px; padding: 0 .3rem; }
+
+.foot { margin-top: 3rem; padding-top: .5rem; border-top: 1px solid var(--ink); font-size: .9375rem; display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+.foot p { margin: .25rem 0; }
+.attest { font: .75rem/1.5 var(--mono); font-variant-numeric: tabular-nums; overflow-x: auto; white-space: nowrap; }
+
+@media (min-width: 48rem) {
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  .two > .entry:nth-child(2) { border-top: 0; padding-top: 0; }
+  .verify__key { grid-template-columns: minmax(0, 1fr) auto; }
+  .verify__key .art { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+/* ---------- Direction A: Broadsheet+ ---------- */
+.dateline { border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink); }
+.mast__name { font-size: clamp(3.5rem, 17vw, 8rem); letter-spacing: -.02em; }
+.lead .entry__title { font-size: clamp(1.9rem, 6vw, 2.75rem); }
+.lead .entry__summary { font-size: 1.25rem; line-height: 1.45; }
+.section__head { border-top: 3px solid var(--ink); }
+.entry__kicker .k { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
+</style>
+
+<div class="ctl" role="region" aria-label="Sampler controls">
+  <div class="ctl__group" role="group" aria-label="Dateline tick">
+    <span class="ctl__label">Dateline</span>
+    <button type="button" id="replay">Replay tick</button>
+  </div>
+</div>
+
+<div class="site" id="site">
+  <header class="mast">
+    <h1 class="mast__name">M. Doyle</h1>
+    <p class="mast__standing">Notre Dame · Computer Engineering · Class of 2029</p>
+    <p class="dateline" aria-label="Edition">
+      <span data-l="Volume">Vol. V · No. <b class="ed" style="font-weight:inherit">1</b></span>
+      <span data-l="Date"><time datetime="2026-10-24">October 24, 2026</time></span>
+      <span class="wide" data-l="Content hash"><span class="hash">sha256 <span class="hv">adf6401ccdcf72f0</span></span></span>
+    </p>
+    <nav class="index" aria-label="Sections"><a href="#research">Research</a><a href="#projects">Projects</a><a href="#writing">Writing</a><a href="#about">About</a><a href="#about">Resume</a></nav>
+  </header>
+
+  <main>
+    <p class="positioning">Applied cryptography researcher working at the hardware-software intersection to identify risks in trusted execution environments.</p>
+
+    <section class="section" id="projects">
+      <h2 class="section__head">Projects <span class="count">1 current</span></h2>
+      <ul class="entries lead">
+        <li class="entry">
+          <p class="entry__kicker"><span class="k">Lead</span><span>Jul–Aug 2026</span></p>
+          <h3 class="entry__title"><a href="#projects">Passagework</a></h3>
+          <p class="entry__summary">A browser tool for practicing musicians that loops a short passage of a recording while the sheet music stays on screen, at anything from half speed to full, all hands-free. Everything runs in your browser, with no account and no uploads.</p>
+          <figure class="fig" id="fig">
+            <div class="fig__stage"><canvas id="wave" tabindex="0" role="slider" aria-label="Loop region on a recording of Brahms, Symphony No. 4, third movement. Drag the edges, or focus and press I and O while playing." aria-valuetext=""></canvas></div>
+            <div class="fig__bar">
+              <button type="button" id="play">Play</button>
+              <label>Tempo <input type="range" id="tempo" min="50" max="100" step="5" value="100"> <span class="mono" id="tv">100%</span></label>
+              <span class="fig__read" id="read"></span>
+            </div>
+            <figcaption>The opening of Brahms, Symphony No. 4, III (Allegro giocoso). Drag the shaded loop's edges, or press <kbd>Space</kbd> to play and <kbd>I</kbd> / <kbd>O</kbd> to set the edges where the playhead is, as in the real tool; <kbd>←</kbd> <kbd>→</kbd> nudge the last edge by 10 ms. At 100% the loop is seamless; slower tempos use the browser's own pitch-preserving playback, which can leave a small seam that Passagework itself doesn't. Recording: Musopen (CC0), via Wikimedia Commons.</figcaption>
+          </figure>
+          <details class="more"><summary>Details</summary>
+            <dl class="facts"><dt>Role</dt><dd>Product, design, and review</dd><dt>Stack</dt><dd>TypeScript, Vite, AudioWorklet</dd><dt>Live</dt><dd><a href="https://passagework.us">passagework.us</a></dd></dl>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" id="research">
+      <h2 class="section__head">Research <span class="count">1 current · 1 past</span></h2>
+      <ul class="entries two">
+        <li class="entry">
+          <p class="entry__kicker"><span class="k">Current</span><span>Data Security and Privacy Lab</span></p>
+          <h3 class="entry__title"><a href="#research" class="pending">Remote attestation entry</a></h3>
+          <p class="entry__summary pending">Your copy goes here (summary ≤ 20 words).</p>
+        </li>
+        <li class="entry">
+          <p class="entry__kicker"><span class="k">Past</span><span>Mar–Oct 2026</span></p>
+          <h3 class="entry__title"><a href="#research">RadioHound</a></h3>
+          <p class="entry__summary">Research on RadioHound, a receiver that computes power spectra on a Zynq FPGA. I learned to write FPGA hardware in Python, then built a harness for checking the FPGA's spectrum math against a software reference.</p>
+          <details class="more"><summary>Details</summary>
+            <dl class="facts"><dt>Role</dt><dd>Undergraduate researcher, Notre Dame Wireless Institute (STRAND)</dd><dt>Stack</dt><dd>Python, Amaranth HDL, Verilog, NumPy, Zynq-7000</dd></dl>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" id="writing">
+      <h2 class="section__head">Writing <span class="count">5</span></h2>
+      <ul class="entries two">
+        <li class="entry"><p class="entry__kicker"><span>The Observer · Life</span></p><h3 class="entry__title"><a href="https://www.ndsmcobserver.com/article/2026/01/you-should-be-excited-to-write">You Should be Excited to Write</a></h3><p class="entry__meta"><time datetime="2026-01-29">January 29, 2026</time></p><p class="entry__summary">Why quality writing is a necessary skill for your portfolio of talents</p></li>
+        <li class="entry"><p class="entry__kicker"><span>The Wall Street Journal · World</span></p><h3 class="entry__title"><a href="https://www.wsj.com/opinion/what-does-the-u-s-operation-in-venezuela-mean-6a297227">No Easy Path Upward</a></h3><p class="entry__meta"><time datetime="2026-01-13">January 13, 2026</time></p><p class="entry__summary">What does historical precedent tell us about the significance of Maduro's capture?</p></li>
+        <li class="entry"><p class="entry__kicker"><span>The Observer · Other</span></p><h3 class="entry__title"><a href="https://www.ndsmcobserver.com/article/2025/11/it-s-a-terrible-day-thanks-be-to-god">It's a Terrible Day, Thanks be to God</a></h3><p class="entry__meta"><time datetime="2025-11-07">November 7, 2025</time></p><p class="entry__summary">How one priest from Ireland transformed a destitute corner of America</p></li>
+        <li class="entry"><p class="entry__kicker"><span>The Observer · Faith</span></p><h3 class="entry__title"><a href="https://www.ndsmcobserver.com/article/2025/10/what-has-13-years-of-catholic-education-actually-taught-me">What Has 13 Years of Catholic Education Taught Me?</a></h3><p class="entry__meta"><time datetime="2025-10-03">October 3, 2025</time></p><p class="entry__summary">Holistic learning from a faith-based perspective</p></li>
+        <li class="entry"><p class="entry__kicker"><span>The Observer · Life</span></p><h3 class="entry__title"><a href="https://www.ndsmcobserver.com/article/2025/09/our-crisis-of-compassion">Our Crisis of Compassion</a></h3><p class="entry__meta"><time datetime="2025-09-19">September 19, 2025</time></p><p class="entry__summary">Examining the relational disenfranchisement of a generation</p></li>
+      </ul>
+    </section>
+
+    <section class="section" id="about">
+      <h2 class="section__head">About</h2>
+      <p style="max-width:65ch">Outside the lab, I play violin in the Notre Dame Symphony Orchestra and write a biweekly opinion column for The Observer.</p>
+      <p style="font-size:.9375rem">mdoyle25@nd.edu · <a href="https://github.com/mackfound">GitHub</a> · <a href="https://www.linkedin.com/in/mdoyle29">LinkedIn</a></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="attest">build f1379af · signed SHA256:SIrKxFe96nzghLrALjXmB/3/GKZknXeDV48jwZQXsrE · <a href="#verify">verify →</a></p>
+  </footer>
+
+  <section class="verify" id="verify" aria-labelledby="verify-h">
+    <p class="verify__tag">Mock of /verify/ (its own page on the site): the randomart's home</p>
+    <h2 id="verify-h">Verify</h2>
+    <p class="pending">Your explainer stays as is: "Every page on this site is signed…"</p>
+    <h3>Signing key</h3>
+    <div class="verify__key">
+      <figure class="art" aria-label="Signing key fingerprint as SSH randomart, as drawn by ssh-keygen -lv"><pre></pre><figcaption>Signing key · ED25519</figcaption></figure>
+      <dl class="facts"><dt>Fingerprint</dt><dd><code>SHA256:SIrKxFe96nzghLrALjXmB/3/GKZknXeDV48jwZQXsrE</code></dd><dt>Also on</dt><dd><a href="https://github.com/mackfound">GitHub →</a></dd></dl>
+    </div>
+    <ol>
+      <li>Download the manifest and its signature</li>
+      <li>Save the public key</li>
+      <li>Check the signature</li>
+      <li>Check a page against the manifest</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const FP = "SIrKxFe96nzghLrALjXmB/3/GKZknXeDV48jwZQXsrE=";
+  const HASH = "adf6401ccdcf72f004ffb299d97d57f864b97d345461af6276bfc370c4299d5b";
+
+  document.getElementById("replay").addEventListener("click", playTick);
+
+  // --- Randomart: OpenSSH's drunken-bishop walk over the fingerprint bytes (matches `ssh-keygen -lv`).
+  function walk(b64) {
+    const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    let x = 8, y = 4; const path = [[x, y]];
+    for (const b0 of bytes) { let b = b0; for (let i = 0; i < 4; i++) {
+      x = Math.max(0, Math.min(16, x + (b & 1 ? 1 : -1))); y = Math.max(0, Math.min(8, y + (b & 2 ? 1 : -1)));
+      path.push([x, y]); b >>= 2; } }
+    return path;
+  }
+  const PATH = walk(FP), AUG = " .o+=*BOX@%&#/^SE";
+  function frame(n) {
+    const f = Array.from({ length: 17 }, () => new Array(9).fill(0));
+    for (let i = 1; i <= n; i++) { const [x, y] = PATH[i]; if (f[x][y] < 14) f[x][y]++; }
+    const done = n === PATH.length - 1, [hx, hy] = PATH[n];
+    if (n > 0) f[8][4] = 15; if (done) f[hx][hy] = 16;
+    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    let out = "+--[ED25519 256]--+\n";
+    for (let r = 0; r < 9; r++) {
+      let row = "|";
+      for (let c = 0; c < 17; c++) { const ch = esc(AUG[f[c][r]]); row += (!done && c === hx && r === hy) ? `<span class="lit">${ch === " " ? "·" : ch}</span>` : ch; }
+      out += row + "|\n";
+    }
+    return out + "+----[SHA256]-----+";
+  }
+document.querySelectorAll(".art pre").forEach((p) => (p.innerHTML = frame(PATH.length - 1)));
+
+  // --- Dateline tick: the edition number and content hash resolve left to right.
+  let tickTimer;
+  function playTick() {
+    clearInterval(tickTimer);
+    const hv = document.querySelector(".hv"), ed = document.querySelector(".ed"), target = HASH.slice(0, 16);
+    if (reduce) { hv.textContent = target; ed.textContent = "1"; return; }
+    let t = 0;
+    tickTimer = setInterval(() => {
+      const fixed = Math.floor(t / 3);
+      hv.textContent = target.slice(0, fixed) + Array.from({ length: 16 - fixed }, () => "0123456789abcdef"[Math.random() * 16 | 0]).join("");
+      ed.textContent = t < 20 ? String(t % 10) : "1";
+      if (++t > 48) { clearInterval(tickTimer); hv.textContent = target; ed.textContent = "1"; }
+    }, 28);
+  }
+  // --- Working figure: a real recording, loaded on first Play.
+  // At 100% the loop is an AudioBufferSourceNode loop (sample-accurate, no click);
+  // below 100% it's <audio> with preservesPitch, wrapped at the loop end each frame.
+  const cv = document.getElementById("wave"), ctx = cv.getContext("2d");
+  const PEAKS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.006, 0.032, 0.108, 0.31, 0.42, 0.518, 0.556, 0.666, 0.714, 0.514, 0.384, 0.402, 0.378, 0.538, 0.45, 0.53, 0.558, 0.442, 0.438, 0.497, 0.417, 0.446, 0.482, 0.501, 0.649, 0.52, 0.489, 0.394, 0.353, 0.31, 0.325, 0.384, 0.558, 0.53, 0.43, 0.549, 0.535, 0.5, 0.543, 0.61, 0.45, 0.575, 0.415, 0.512, 0.551, 0.46, 0.441, 0.4, 0.2, 0.297, 0.306, 0.277, 0.245, 0.162, 0.203, 0.205, 0.227, 0.308, 0.43, 0.457, 0.298, 0.351, 0.506, 0.558, 0.484, 0.385, 0.355, 0.42, 0.38, 0.29, 0.28, 0.205, 0.267, 0.413, 0.484, 0.52, 0.857, 0.92, 0.781, 0.716, 0.453, 0.295, 0.37, 0.466, 0.628, 0.471, 0.594, 0.714, 0.505, 0.523, 0.425, 0.373, 0.343, 0.409, 0.538, 0.567, 0.382, 0.389, 0.332, 0.397, 0.29, 0.302, 0.397, 0.524, 0.546, 0.613, 0.456, 0.479, 0.442, 0.512, 0.472, 0.529, 0.486, 0.558, 0.554, 0.547, 0.543, 0.433, 0.406, 0.323, 0.305, 0.291, 0.295, 0.302, 0.246, 0.246, 0.307, 0.455, 0.484, 0.538, 0.571, 0.553, 0.559, 0.509, 0.496, 0.755, 0.653, 0.41, 0.353, 0.251, 0.2, 0.167, 0.129, 0.184, 0.252, 0.303, 0.467, 0.319, 0.435, 0.521, 0.592, 0.443, 0.388, 0.471, 0.365, 0.631, 0.563, 0.634, 0.53, 0.443, 0.356, 0.323, 0.358, 0.318, 0.39, 0.417, 0.482, 0.465, 0.57, 0.474, 0.318, 0.349, 0.341, 0.355, 0.317, 0.307, 0.301, 0.352, 0.323, 0.353, 0.258, 0.294, 0.317, 0.281, 0.25, 0.252, 0.283, 0.253, 0.152, 0.197, 0.179, 0.232, 0.17, 0.182, 0.229, 0.285, 0.438, 0.507, 0.404, 0.528, 0.598, 0.584, 0.561, 0.582, 0.731, 0.514, 0.496, 0.569, 0.533, 0.488, 0.463, 0.457, 0.462, 0.636, 0.592, 0.592, 0.569, 0.849, 0.537, 0.628, 0.432, 0.812, 0.575, 0.588, 0.472, 0.423, 0.347, 0.406, 0.304, 0.277, 0.309, 0.5, 0.43, 0.477, 0.424, 0.582, 0.56, 0.529, 0.638, 0.547, 0.433, 0.467, 0.459, 0.492, 0.358, 0.369, 0.271, 0.227, 0.346, 0.464, 0.427, 0.348, 0.445, 0.54, 0.781, 0.515, 0.537, 0.542, 0.48, 0.46, 0.483, 0.461, 0.39, 0.396, 0.324, 0.329, 0.341, 0.406, 0.62, 0.475, 0.656, 0.381, 0.487, 0.608, 0.518, 0.582, 0.504, 0.501, 0.448, 0.439, 0.378, 0.28, 0.302, 0.431, 0.583, 0.47, 0.529, 0.573, 0.722, 0.613, 0.644, 0.712, 0.815, 0.552, 0.511, 0.585, 0.516, 0.502, 0.479, 0.381, 0.443, 0.387, 0.445, 0.529, 0.563, 0.462, 0.493, 0.537, 0.419, 0.558, 0.448, 0.508, 0.419, 0.379, 0.357, 0.398, 0.307, 0.296, 0.381, 0.445, 0.405, 0.398, 0.484, 0.418, 0.427, 0.388, 0.472, 0.509, 0.49, 0.503, 0.384, 0.396, 0.38, 0.339, 0.322, 0.371, 0.374, 0.485, 0.389, 0.582, 0.567, 0.793, 0.777, 0.696, 0.87, 0.869, 0.829, 0.696, 1.0, 0.819, 0.79, 0.864, 0.709, 0.586, 0.539, 0.651, 0.785, 0.598, 0.556, 0.601, 0.482, 0.531, 0.506, 0.455, 0.408, 0.298, 0.263, 0.255, 0.263, 0.187, 0.17, 0.163, 0.138, 0.242, 0.298, 0.369, 0.364, 0.365, 0.37, 0.378, 0.386, 0.43, 0.367, 0.379, 0.361, 0.359, 0.357, 0.358, 0.38, 0.361, 0.501, 0.537, 0.445, 0.452, 0.536, 0.467, 0.513, 0.547, 0.41, 0.395, 0.258, 0.25, 0.213, 0.157, 0.165, 0.128, 0.124, 0.101, 0.126, 0.321, 0.363, 0.72, 0.68, 0.698, 0.696, 0.798, 0.873, 0.686, 0.935, 0.95, 0.835, 0.708, 0.864, 0.804, 0.681, 0.928, 0.751, 0.715, 0.588, 0.688, 0.622, 0.681, 0.676, 0.69, 0.652, 0.537, 0.529, 0.37, 0.346, 0.28, 0.291, 0.273, 0.193, 0.187, 0.174, 0.213, 0.27, 0.355, 0.479, 0.435, 0.316, 0.408, 0.35, 0.45, 0.38, 0.357, 0.335, 0.467, 0.361, 0.329, 0.463, 0.43, 0.416, 0.414, 0.336, 0.533, 0.51, 0.402, 0.474, 0.547, 0.424, 0.354, 0.358, 0.224, 0.188, 0.192, 0.191, 0.171, 0.131, 0.121, 0.107, 0.203, 0.237, 0.331, 0.508, 0.569, 0.825, 0.745, 0.886, 0.696, 0.648, 0.656, 0.729, 0.662, 0.527, 0.679, 0.546, 0.528, 0.502, 0.6, 0.534, 0.455, 0.347, 0.432, 0.6, 0.394, 0.365, 0.389, 0.279, 0.301, 0.232, 0.206, 0.204, 0.181, 0.205, 0.153, 0.167, 0.157, 0.24, 0.296, 0.272, 0.421, 0.409, 0.572, 0.364, 0.52, 0.413, 0.312, 0.408, 0.409, 0.407, 0.425, 0.372, 0.518, 0.463, 0.482, 0.464, 0.499, 0.627, 0.385, 0.657, 0.501, 0.43, 0.469, 0.445, 0.47, 0.464, 0.339, 0.29, 0.305, 0.293, 0.197, 0.17, 0.228, 0.339, 0.43, 0.561, 0.779, 0.714, 0.663, 0.565, 0.847, 0.774, 0.708, 0.747, 0.679, 0.64, 0.807, 0.727, 0.622, 0.579, 0.518, 0.692, 0.564, 0.501, 0.539, 0.564, 0.566, 0.546, 0.415, 0.432, 0.526, 0.418, 0.326, 0.293, 0.414, 0.33, 0.278, 0.205, 0.171, 0.39, 0.306, 0.332, 0.387, 0.409, 0.481, 0.333, 0.452, 0.286, 0.29, 0.369, 0.261, 0.254, 0.287, 0.237, 0.26, 0.197, 0.178, 0.194, 0.169, 0.166, 0.146, 0.227, 0.195, 0.212, 0.157, 0.156, 0.139, 0.134, 0.182, 0.195, 0.143, 0.155, 0.147, 0.158, 0.141, 0.104, 0.086, 0.116, 0.208, 0.136, 0.186, 0.151, 0.158, 0.147, 0.135, 0.156, 0.143, 0.132, 0.124, 0.18, 0.147, 0.226, 0.258, 0.168, 0.225, 0.267, 0.291, 0.281, 0.291, 0.341, 0.356, 0.265, 0.278, 0.207, 0.167, 0.199, 0.15, 0.178, 0.173, 0.148, 0.149, 0.157, 0.112, 0.17, 0.158, 0.127, 0.143, 0.129, 0.13, 0.182, 0.163, 0.166, 0.185, 0.218, 0.272, 0.35, 0.262, 0.245, 0.296, 0.307, 0.308, 0.291, 0.31, 0.359, 0.329, 0.311, 0.276, 0.271, 0.23, 0.201, 0.213, 0.227, 0.339, 0.294, 0.307, 0.304, 0.326, 0.318, 0.283, 0.256, 0.354, 0.228, 0.203, 0.223, 0.22, 0.181, 0.144, 0.138, 0.189, 0.212, 0.193, 0.294, 0.34, 0.38, 0.383, 0.414, 0.347, 0.319, 0.259, 0.211, 0.21, 0.171, 0.196, 0.167, 0.155, 0.173, 0.216, 0.139, 0.145, 0.272, 0.272, 0.337, 0.321, 0.333, 0.31, 0.279, 0.168, 0.171, 0.189, 0.192, 0.131, 0.181, 0.222, 0.306, 0.275, 0.281, 0.263, 0.348, 0.276, 0.413, 0.383, 0.314, 0.348, 0.332, 0.243, 0.243, 0.303, 0.273, 0.32, 0.269, 0.296, 0.335, 0.302, 0.322, 0.303, 0.46, 0.375, 0.358, 0.446, 0.471, 0.302, 0.36, 0.389, 0.284, 0.289, 0.229, 0.227, 0.199, 0.202, 0.284, 0.353, 0.333, 0.376, 0.302, 0.351, 0.373, 0.336, 0.431, 0.348, 0.381, 0.273, 0.283, 0.359, 0.322, 0.33, 0.23, 0.251, 0.262, 0.299, 0.172, 0.274, 0.231, 0.239, 0.261, 0.233, 0.211, 0.265, 0.184, 0.172, 0.254, 0.286, 0.181, 0.265, 0.3, 0.205, 0.225, 0.205, 0.292, 0.326, 0.213, 0.198, 0.224, 0.321, 0.308, 0.307, 0.353, 0.365, 0.346, 0.244, 0.254, 0.269, 0.367, 0.39, 0.334, 0.312, 0.271, 0.348, 0.275, 0.284, 0.3, 0.261, 0.3, 0.195, 0.302, 0.234, 0.258, 0.253, 0.248, 0.297, 0.49, 0.39, 0.389, 0.418, 0.359, 0.395, 0.276, 0.28, 0.242, 0.254, 0.311, 0.267, 0.209, 0.317, 0.235, 0.214, 0.23, 0.326, 0.329, 0.446, 0.36, 0.354, 0.35, 0.272, 0.334, 0.172, 0.222, 0.223, 0.211, 0.207, 0.182, 0.143, 0.174, 0.182, 0.163, 0.191, 0.195, 0.201, 0.351, 0.246, 0.344, 0.306], N = PEAKS.length, DUR = 25, CLIP = new Audio().canPlayType('audio/mp4; codecs="mp4a.40.2"') ? "brahms4-iii.mp4" : "brahms4-iii.ogg";
+  const loop = { a: 4, b: 8 }; let edge = "b", head = 3.5, playing = false;
+  const css = (n) => getComputedStyle(root).getPropertyValue(n).trim();
+  const playBtn = document.getElementById("play"), tempo = document.getElementById("tempo");
+  let ac, buf, el, src, last = 0, loading = null;
+
+  function size() { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; ctx.setTransform(d, 0, 0, d, 0, 0); draw(); }
+  function draw() {
+    const w = cv.clientWidth, h = cv.clientHeight, X = (t) => t / DUR * w;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = css("--tint"); ctx.fillRect(X(loop.a), 0, X(loop.b) - X(loop.a), h);
+    ctx.font = "10px " + css("--sans"); ctx.fillStyle = css("--muted");
+    for (let s = 5; s < DUR; s += 5) ctx.fillText(`${s}s`, X(s) + 3, 12);
+    const step = w / N;
+    for (let i = 0; i < N; i++) {
+      const t = i / N * DUR, v = Math.max(.5, PEAKS[i] * (h / 2 - 14));
+      ctx.fillStyle = t >= loop.a && t <= loop.b ? css("--accent") : css("--muted");
+      ctx.fillRect(i * step, h / 2 + 5 - v, Math.max(1, step - .4), v * 2);
+    }
+    ctx.fillStyle = css("--accent");
+    for (const [k, t] of [["a", loop.a], ["b", loop.b]]) { ctx.fillRect(X(t) - (k === edge ? 1.5 : 1), 0, k === edge ? 3 : 2, h); ctx.fillRect(X(t) - 5, h - 8, 10, 8); }
+    ctx.fillStyle = css("--ink"); ctx.fillRect(X(head) - .5, 0, 1.5, h);
+    const f = (t) => t.toFixed(2);
+    document.getElementById("read").textContent = `loop ${f(loop.a)}–${f(loop.b)} s`;
+    cv.setAttribute("aria-valuetext", `Loop from ${f(loop.a)} to ${f(loop.b)} seconds`);
+  }
+
+  function load() {
+    return loading ??= (async () => {
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      buf = await ac.decodeAudioData(await (await fetch(CLIP)).arrayBuffer());
+      el = new Audio(CLIP); el.preservesPitch = true; el.preload = "auto";
+    })();
+  }
+  const rate = () => tempo.value / 100;
+  function start() {
+    if (head < loop.a - .5 || head >= loop.b) head = Math.max(0, loop.a - .5); // short pre-roll
+    if (rate() === 1) {
+      src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
+      src.loopStart = loop.a; src.loopEnd = loop.b; src.connect(ac.destination); src.start(0, head);
+      last = ac.currentTime;
+    } else {
+      el.playbackRate = rate(); el.currentTime = head; el.play().catch(() => {});
+    }
+    requestAnimationFrame(tick);
+  }
+  function stop() { if (src) { src.stop(); src.disconnect(); src = null; } if (el) el.pause(); }
+  function tick() {
+    if (!playing) return;
+    if (src) { const now = ac.currentTime; head += now - last; last = now; if (head >= loop.b) head = loop.a + (head - loop.b) % (loop.b - loop.a); }
+    else { if (el.currentTime >= loop.b) el.currentTime = loop.a; head = el.currentTime; }
+    draw(); requestAnimationFrame(tick);
+  }
+  async function toggle() {
+    if (playing) { playing = false; stop(); playBtn.textContent = "Play"; draw(); return; }
+    playBtn.textContent = "Loading…"; playBtn.disabled = true;
+    try { await load(); await ac.resume(); } catch { playBtn.textContent = "Can't play"; return; }
+    playBtn.disabled = false; playBtn.textContent = "Pause"; playing = true; start();
+  }
+  const restart = () => { if (playing) { stop(); start(); } };
+  const edges = () => { if (src) { src.loopStart = loop.a; src.loopEnd = loop.b; } };
+  playBtn.addEventListener("click", toggle);
+  tempo.addEventListener("input", () => { document.getElementById("tv").textContent = tempo.value + "%"; restart(); });
+  const clamp = () => { loop.a = Math.max(0, Math.min(loop.a, loop.b - .2)); loop.b = Math.min(DUR, Math.max(loop.b, loop.a + .2)); edges(); };
+  let drag = null;
+  const tAt = (e) => { const r = cv.getBoundingClientRect(); return Math.max(0, Math.min(DUR, (e.clientX - r.left) / r.width * DUR)); };
+  cv.addEventListener("pointerdown", (e) => { const t = tAt(e); drag = Math.abs(t - loop.a) < Math.abs(t - loop.b) ? "a" : "b"; edge = drag; loop[drag] = t; clamp(); draw(); cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove", (e) => { if (!drag) return; loop[drag] = tAt(e); clamp(); draw(); });
+  cv.addEventListener("pointerup", () => { drag = null; if (head < loop.a || head >= loop.b) restart(); });
+  cv.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if (k === " ") { e.preventDefault(); toggle(); }
+    else if (k === "i") { loop.a = head; edge = "a"; clamp(); draw(); }
+    else if (k === "o") { loop.b = head; edge = "b"; clamp(); draw(); }
+    else if (k === "arrowleft" || k === "arrowright") { e.preventDefault(); loop[edge] += k === "arrowright" ? .01 : -.01; clamp(); draw(); }
+  });
+  new ResizeObserver(size).observe(cv);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+  new MutationObserver(draw).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+
+  playTick();
+})();
+</script>

@@ -1,0 +1,5 @@
+brahms4-iii.mp4, brahms4-iii.ogg: Johannes Brahms, Symphony No. 4 in E minor, Op. 98, III. Allegro giocoso
+(opening 25 s, mono, loudness-normalised). Recording by Musopen, released CC0 (public domain dedication),
+via Wikimedia Commons:
+https://commons.wikimedia.org/wiki/File:Brahms,_Symphony_No._4_in_E_Minor,_Op._98_-_III._Allegro_Giocoso.ogg
+peaks.json: 900-point peak envelope of the same clip, for drawing the waveform before the audio loads.
