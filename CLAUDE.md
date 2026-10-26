@@ -95,9 +95,25 @@ These are private to Michael. To update one from a new session, read it by URL, 
   - Rejected: front-page columns and the narrow page.
   - Next candidates: working figures for RadioHound and remote attestation. Each needs real data and its own review.
 
+- **2026-10-25: Launched.** mdoyle.dev is live on the `mdoyle-v5` Pages project with the custom domain attached. Deploys go only through `./deploy.sh` from an up-to-date main, never by uploading `_site/` by hand (the first upload was a hand-uploaded test build with no manifest). The favicon (the masthead M, PR 27) is the last change merged.
+- **2026-10-25: Figures dropped; pivot opened.** Michael rejected both mocked R3 figures (RadioHound Amaranth↔Verilog, TDX quote anatomy) as too large. Neither was built in. He finds the newspaper direction unoriginal and the site reads like his resume. Where it stands:
+  - **Keep regardless:** the signing pipeline, content model, `deploy.sh`, and tests. Only `site.css` and the templates are in play.
+  - **Claude's view:** a new look alone won't fix the resume feel. The site's one original idea is that it's signed ("don't trust this page, verify it"), and that's currently buried in the footer and `/verify/`.
+  - **Seeds offered:** Proof (the site verifies itself in front of you), Notebook (first-person, Notes as the main content), Score (work laid out like a piece of music; gimmick risk), Almost nothing (one strong paragraph, minimal interface).
+  - **Process:** go wide before going deep. Sketch genuinely different directions, not variations on the current one, and don't pick on first viewing. Michael said he takes the first idea too often.
+  - **Waiting on Michael:** 2–3 sites that made him stop scrolling, or the closest seed. Don't start sketching before that.
+  - **Also raised:** the positioning line reads like resume-speak (his to rewrite), and Notes is built but hidden.
+- **2026-10-25: Contact address.** The site publishes `contact@mdoyle.dev`. That's Cloudflare Email Routing, forwarding to `mdoyle25@nd.edu`; it receives only, and replies come from the nd.edu address unless a sending service is added.
+  - `contactLinks.js` writes the address as HTML character references at build time, to stop naive scrapers.
+  - **Cloudflare Email Address Obfuscation must stay off.** It rewrote every page carrying the address, injected `/cdn-cgi` JS, and broke the signed hashes; `verify-live` caught it.
+  - The resume PDF still shows the nd.edu address. It's Michael's file to update.
+- **2026-10-25: Repo moved** from `~/Desktop/Projects/` (synced by iCloud, which caused hung tests, a git bus error, and failed pushes) to `~/Projects/portfolio-site`. Keep it out of iCloud.
+
 ## Open items
 
-- **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` and `npm test` pass. Then work through the §13 launch checklist.
+- **Pivot:** waiting on Michael (see 2026-10-25 above).
+- **§13 launch checklist:** not yet worked through.
+- **workerd:** if `wrangler pages deploy` fails, run `npm install-scripts approve workerd` (npm held back its install script during the `npm ci` reinstall).
 - **Node:** bump `.nvmrc` and `engines.node` from 24.21.0 to 24.22.1 after 2026-11-03, once it's two weeks old. First check that no newer 24.x security release supersedes it. Keep that diff to the pin only.
 - **RadioHound:** Michael will revise the entry now that he's left the lab.
 - **Post-launch backlog:** spec §14.
