@@ -1,11 +1,12 @@
 ---
 layout: base.njk
 title: Resume
+pageClass: resume
 description: "Resume of Michael Doyle, Notre Dame computer engineering student: attestation research on Intel TDX, FPGA workflows, and software projects."
 ---
 # Resume
 
-{% if assets.resumePdf %}[PDF version →](/assets/media/michael-doyle-resume.pdf){% else %}TODO-COPY(resume-pdf){% endif %}
+{% if assets.resumePdf %}<p class="actions"><a href="/assets/media/michael-doyle-resume.pdf">PDF version →</a></p>{% else %}TODO-COPY(resume-pdf){% endif %}
 
 {% include "contact.njk" %}
 

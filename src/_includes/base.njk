@@ -17,12 +17,11 @@
 <body>
   {% include "masthead.njk" %}
 
-  <main>
+  <main{% if pageClass %} class="{{ pageClass }}"{% endif %}>
     {{ content | safe }}
   </main>
 
   <footer class="site-footer">
-    <p><a href="/resume/">Resume</a></p>
     <p class="attestation"><a href="/verify/">build {{ build.sha or "…" }} · signed {{ site.keyFingerprint or "…" }} · verify →</a></p>
   </footer>
   {%- if page.url == "/" %}
