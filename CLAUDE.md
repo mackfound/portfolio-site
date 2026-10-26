@@ -79,6 +79,13 @@ These are private to Michael. To update one from a new session, read it by URL, 
   - Randomart is `scripts/lib/randomart.js`, rendered by the `randomart` filter on `/verify/`, and tested against `ssh-keygen -lv` with throwaway keys.
   - Pages with JS need a `budget-exceptions.json` entry, and only Michael adds those (spec §8).
 
+- **2026-10-25: UI fixes after launch.** Michael chose, from the UI options sampler (https://claude.ai/artifact/HCKPd7jHno3KCwSXsyBhKd):
+  - **Red means clickable.** Only links and controls use the accent. Kickers ("Lead", "Current", resume roles) are ink semibold, and dates are muted.
+  - **Resume as a ledger:** 3 px section rules, a hairline between jobs, role and dates as a kicker, and bullets hung off a margin rule. Pages opt in with `pageClass` in front matter.
+  - **Text buttons** for actions ("All …", Live/Source, PDF, contact): red small caps, underlined on hover. Links inside sentences stay underlined. The footer's duplicate Resume link is gone.
+  - **Hover lights up only the link,** never the whole entry.
+  - The front page shows **2 writing entries**.
+
 ## Open items
 
 - **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` and `npm test` pass. Then work through the §13 launch checklist.

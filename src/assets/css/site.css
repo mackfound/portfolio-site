@@ -200,8 +200,8 @@ mark.todo-copy { background: #ffe066; color: #1c1a16; font-family: var(--mono); 
   text-transform: uppercase;
   transition: color 0.2s ease;
 }
-.entry__kicker .k { color: var(--accent); }
-.entry:hover .entry__kicker { color: var(--accent); }
+/* Red means clickable, so kickers are ink, not accent. */
+.entry__kicker .k { color: var(--ink); font-weight: 600; }
 
 .entry__title { margin: 0; font-size: 1.5rem; }
 .entry__title a {
@@ -210,7 +210,8 @@ mark.todo-copy { background: #ffe066; color: #1c1a16; font-family: var(--mono); 
   background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat;
   transition: background-size 0.25s ease, color 0.2s ease;
 }
-.entry:hover .entry__title a, .entry__title a:focus-visible { color: var(--accent); background-size: 100% 1px; }
+/* Only the link itself lights up, so the highlight matches what you can click. */
+.entry__title a:hover, .entry__title a:focus-visible { color: var(--accent); background-size: 100% 1px; }
 
 /* The lead story: the site's one `lead: true` entry, set larger. */
 .lead .entry__title { font-size: clamp(1.9rem, 6vw, 2.75rem); }
@@ -226,7 +227,24 @@ mark.todo-copy { background: #ffe066; color: #1c1a16; font-family: var(--mono); 
 
 .entry__summary { max-width: var(--measure); margin: 0.5rem 0 0; }
 
-.section__more { margin: 0.5rem 0 0; font-size: 0.9375rem; }
+.section__more { margin: 0.75rem 0 0; }
+
+/* Text buttons: actions (more, live/source, PDF, contact) in small caps, not
+   underlined prose links. Links inside sentences stay underlined. */
+:is(.section__more, .project-links, .contact, .actions) a {
+  color: var(--accent);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.2s ease;
+}
+:is(.section__more, .project-links, .contact, .actions) a:hover,
+:is(.section__more, .project-links, .contact, .actions) a:focus-visible { background-size: 100% 1px; }
+:is(.project-links, .contact) { color: var(--ink-muted); }
 
 /* Expand in place: native <details>, animated where the browser supports it. */
 .more { max-width: var(--measure); margin-top: 0.5rem; font-size: 0.9375rem; }
@@ -290,7 +308,34 @@ article h2 { font-size: 1.375rem; margin: 2rem 0 0.5rem; }
 }
 .facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; } /* long values (key fingerprint) wrap instead of widening the page */
 
-.contact { font-size: 0.9375rem; }
+/* ---------- Resume: a ledger ---------- */
+
+.resume h2 {
+  margin: 2.5rem 0 1rem;
+  padding-top: 0.4rem;
+  border-top: 3px solid var(--ink);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.resume h3 { margin: 1.25rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--rule); font-size: 1.3rem; }
+.resume h2 + h3 { padding-top: 0; border-top: 0; }
+/* Role and dates, set as a kicker: role in ink, dates muted. */
+.resume h3 + p {
+  margin: 0.25rem 0 0.5rem;
+  color: var(--ink-muted);
+  font-family: var(--sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.resume h3 + p em { color: var(--ink); font-style: normal; font-weight: 600; }
+.resume ul { max-width: var(--measure); margin: 0.5rem 0 0; padding-left: 1rem; border-left: 2px solid var(--rule); list-style: none; }
+.resume li { position: relative; }
+.resume li + li { margin-top: 0.45rem; }
+.resume li::before { content: ""; position: absolute; top: 0.75em; left: -1rem; width: 0.45rem; border-top: 2px solid var(--rule); }
 
 /* ---------- Working figure (one per entry page at most) ---------- */
 

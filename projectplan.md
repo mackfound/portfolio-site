@@ -90,7 +90,7 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 5. Writing: the latest entries, with a link to all.
 6. Notes: hidden at launch (`show: false` in `sections.json`).
 7. About: a short blurb linking to the full page. Includes the contact line.
-8. Footer: attestation line and resume link.
+8. Footer: attestation line. (The resume link is in the index strip; the footer copy was dropped 2026-10-25.)
 
 Sections 3–7 render from `sections.json` in configured order. The order above is the default config, not hard-coded.
 
