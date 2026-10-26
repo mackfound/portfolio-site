@@ -1,6 +1,6 @@
 {# Contact line: email and profile links (src/_data/contactLinks.js). Omitted while empty. #}
 {% if contactLinks.length %}
 <p class="contact">
-  {% for item in contactLinks %}{% if not loop.first %} · {% endif %}<a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}
+  {% for item in contactLinks %}{% if not loop.first %} · {% endif %}{% if item.html %}<a href="{{ item.href | safe }}">{{ item.label | safe }}</a>{% else %}<a href="{{ item.href }}">{{ item.label }}</a>{% endif %}{% endfor %}
 </p>
 {% endif %}

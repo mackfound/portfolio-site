@@ -185,3 +185,20 @@ test("the front page's lead figure is a static picture linking to its entry", ()
   assert.match(home, /<a class="lead__fig" href="\/projects\/passagework\/" tabindex="-1" aria-hidden="true"><svg class="fig__wave"/);
   assert.doesNotMatch(pages.find((p) => p.path === "projects/index.html").html, /lead__fig/, "front page only");
 });
+
+// The contact address is written as character references (src/_data/contactLinks.js):
+// no page carries it as plain text, and it decodes back to site.json's address.
+test("the contact email is never in the HTML as plain text, and decodes correctly", () => {
+  const { email } = JSON.parse(readFileSync(join(ROOT, "src/_data/site.json"), "utf8"));
+  const decode = (s) => s.replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)));
+  let links = 0;
+  for (const { path, html } of pages) {
+    assert.ok(!html.includes(email), `${path}: plain-text email`);
+    for (const [, href, label] of html.matchAll(/<a href="mailto:([^"]*)">([^<]*)<\/a>/g)) {
+      links++;
+      assert.equal(decode(href), email, `${path}: mailto decodes`);
+      assert.equal(decode(label), email, `${path}: label decodes`);
+    }
+  }
+  assert.ok(links >= 3, "front page, About and Resume carry the contact line");
+});
