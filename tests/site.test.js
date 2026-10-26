@@ -160,3 +160,28 @@ test("the Passagework figure works without JS: static waveform, controls hidden,
   assert.doesNotMatch(html, /<audio\b|<source\b/, "audio loads only on Play");
   assert.match(html, /<script type="module" src="\/assets\/js\/passagework-figure\.js"><\/script>/);
 });
+
+// Clicking through (projectplan.md §3): every entry page leads to the next, and
+// the chain visits every project and research entry before wrapping around.
+test("entry pages chain through every entry with a Next link", () => {
+  const entries = pages.map((p) => p.path).filter((p) => /^(projects|research)\/[^/]+\/index\.html$/.test(p)).sort();
+  const next = (path) => pages.find((p) => p.path === path).html
+    .match(/<nav class="continue"[^>]*>[\s\S]*?<a href="\/([^"]+)\/"/)?.[1] + "/index.html";
+  const seen = new Set();
+  let at = "projects/passagework/index.html";
+  while (!seen.has(at)) { seen.add(at); at = next(at); assert.ok(entries.includes(at), `Next from a page leads to ${at}`); }
+  assert.deepEqual([...seen].sort(), entries);
+});
+
+test("page transitions are CSS only and off under reduced motion", () => {
+  const css = readFileSync(join(out, "assets/css/site.css"), "utf8");
+  assert.match(css, /@view-transition \{ navigation: auto; \}/);
+  const reduce = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+  assert.match(reduce, /::view-transition-group\(\*\), ::view-transition-old\(\*\), ::view-transition-new\(\*\) \{ animation: none !important; \}/);
+});
+
+test("the front page's lead figure is a static picture linking to its entry", () => {
+  const home = pages.find((p) => p.path === "index.html").html;
+  assert.match(home, /<a class="lead__fig" href="\/projects\/passagework\/" tabindex="-1" aria-hidden="true"><svg class="fig__wave"/);
+  assert.doesNotMatch(pages.find((p) => p.path === "projects/index.html").html, /lead__fig/, "front page only");
+});

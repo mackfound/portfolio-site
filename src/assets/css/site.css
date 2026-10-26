@@ -70,7 +70,7 @@ html {
 body {
   margin: 0 auto;
   max-width: var(--page);
-  padding: 0 var(--gutter) 3rem;
+  padding: 0 var(--gutter);
   background: var(--paper);
   font-size: 1.125rem;
   font-optical-sizing: auto;
@@ -358,15 +358,56 @@ article h2 { font-size: 1.375rem; margin: 2rem 0 0.5rem; }
 .art pre { margin: 0; padding: 0; border: 0; overflow: visible; font-size: 12px; line-height: 1.15; }
 .art figcaption { margin-top: 0.35rem; color: var(--ink-muted); font-family: var(--sans); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
-/* ---------- Footer ---------- */
+/* ---------- Entry pages: numbered sections and "Next" ---------- */
+
+article:has(> .facts) { counter-reset: section; }
+article:has(> .facts) > h2 {
+  counter-increment: section;
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  margin-top: 2.25rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+}
+article:has(> .facts) > .facts + h2 { padding-top: 0; border-top: 0; } /* the facts box already rules it off */
+article:has(> .facts) > h2::before { content: counter(section, decimal-leading-zero); color: var(--ink-muted); font: 600 0.75rem/1 var(--mono); }
+
+.continue { margin-top: 3rem; padding-top: 0.4rem; border-top: 3px solid var(--ink); }
+.continue__label { margin: 0; font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.continue a { display: block; padding-top: 0.75rem; color: inherit; text-decoration: none; }
+.continue__kicker { display: block; color: var(--ink-muted); font-family: var(--sans); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.continue__title { display: block; margin: 0.2rem 0; font-size: 1.75rem; line-height: 1.15; transition: color 0.2s ease; }
+.continue a:hover .continue__title, .continue a:focus-visible .continue__title { color: var(--accent); }
+.continue__summary { display: block; color: var(--ink-muted); }
+
+/* ---------- Lead figure (front page) ---------- */
+
+.lead__fig { display: block; margin-top: 1rem; border: 1px solid var(--rule); background: var(--tint); color: var(--ink-muted); }
+.lead__fig svg { display: block; width: 100%; height: 6rem; }
+.lead__fig:hover { color: var(--accent); }
+@media (min-width: 56rem) {
+  .lead .entry:has(.lead__fig) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 2.5rem; }
+  .lead .entry:has(.lead__fig) > :not(.lead__fig) { grid-column: 1; }
+  .lead .lead__fig { grid-column: 2; grid-row: 1 / span 5; align-self: center; margin-top: 0; }
+  .lead .lead__fig svg { height: 10rem; }
+}
+
+/* ---------- Footer: a closing band, full bleed ---------- */
 
 .site-footer {
-  margin-top: 3rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--ink);
+  margin-top: 4rem;
+  padding: 1.75rem 0 1.5rem;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 0 0 100vmax var(--ink);
+  clip-path: inset(0 -100vmax -100vmax);
   font-size: 0.9375rem;
 }
 .site-footer p { margin: 0.25rem 0; }
+.site-footer a { color: var(--paper); }
+.site-footer__mark { font-size: 2rem; font-weight: 500; line-height: 1.1; }
+.site-footer .site-footer__mark { margin-bottom: 0.75rem; }
 
 .attestation {
   overflow-x: auto;
@@ -376,8 +417,26 @@ article h2 { font-size: 1.375rem; margin: 2rem 0 0.5rem; }
   white-space: nowrap;
 }
 
+/* ---------- Page transitions (projectplan.md §2: motion answers navigation) ----------
+   Cross-document view transitions, CSS only. The incoming page styles them:
+   pages rise in from below; the front page settles in from above (going home).
+   The masthead and entry titles carry `view-transition-name`s, so they morph
+   between list and page. Browsers without support simply navigate. */
+
+@view-transition { navigation: auto; }
+::view-transition-group(*) { animation-duration: 0.4s; animation-timing-function: cubic-bezier(0.2, 0, 0, 1); }
+@keyframes vt-in-up { from { opacity: 0; transform: translateY(24px); } }
+@keyframes vt-in-down { from { opacity: 0; transform: translateY(-24px); } }
+@keyframes vt-out-up { to { opacity: 0; transform: translateY(-16px); } }
+@keyframes vt-out-down { to { opacity: 0; transform: translateY(16px); } }
+::view-transition-old(root) { animation: vt-out-up 0.25s ease both; }
+::view-transition-new(root) { animation: vt-in-up 0.4s cubic-bezier(0.2, 0, 0, 1) both; }
+html:has(.masthead:not(.masthead--compact))::view-transition-old(root) { animation-name: vt-out-down; }
+html:has(.masthead:not(.masthead--compact))::view-transition-new(root) { animation-name: vt-in-down; }
+
 /* ---------- Reduced motion (projectplan.md §2) ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

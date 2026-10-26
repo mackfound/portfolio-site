@@ -2,7 +2,7 @@
 layout: base.njk
 ---
 <article>
-  <h1>{{ title }}</h1>
+  <h1 style="view-transition-name: t-{{ page.fileSlug }}">{{ title }}</h1>
   <dl class="facts">
     <dt>Role</dt><dd>{{ role }}</dd>
     <dt>Period</dt><dd>{{ period }}</dd>
@@ -16,4 +16,15 @@ layout: base.njk
   </p>
   {% endif %}
   {{ content | safe }}
+  {#- "Next": projects, then current research, then past research, wrapping
+      around, so no entry page is a dead end. -#}
+  {% set order = collections.projects.slice() %}
+  {% for status in ["current", "past"] %}{% for r in collections.research %}{% if r.data.status == status %}{% set order = (order.push(r), order) %}{% endif %}{% endfor %}{% endfor %}
+  {% set next = order | getNextCollectionItem(page) or order[0] %}
+  {% if next and next.url != page.url %}
+  <nav class="continue" aria-label="Next entry">
+    <p class="continue__label">Next</p>
+    <a href="{{ next.url }}"><span class="continue__kicker">{{ "Research" if next.url.startsWith("/research/") else "Project" }} · {{ next.data.period }}</span><span class="continue__title">{{ next.data.title }}</span><span class="continue__summary">{{ next.data.summary }}</span></a>
+  </nav>
+  {% endif %}
 </article>

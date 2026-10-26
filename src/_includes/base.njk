@@ -22,6 +22,7 @@
   </main>
 
   <footer class="site-footer">
+    <p class="site-footer__mark">{{ site.name }} · Vol. V · No. {{ edition.number }}</p>
     <p class="attestation"><a href="/verify/">build {{ build.sha or "…" }} · signed {{ site.keyFingerprint or "…" }} · verify →</a></p>
   </footer>
   {%- if page.url == "/" %}
