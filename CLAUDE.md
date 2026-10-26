@@ -28,6 +28,7 @@
 | Copy Desk page | `node tools/copy-desk/gen-tracker.mjs` → republish `tools/copy-desk/copy-desk.html` |
 | Preview build | `node tools/preview/build.mjs <dir>` then `node tools/preview/relink.mjs <dir> <sha>` |
 | R1 sampler | `node design/r1-sampler/assemble.mjs` |
+| Favicon | `python3 scripts/fonts/build-favicon.py` (fonttools 4.55.3 + brotli 1.1.0), then rasterize `scripts/fonts/apple-touch-icon.svg` to `src/assets/icons/apple-touch-icon.png` at 180 px |
 
 ## Artifacts on claude.ai
 
