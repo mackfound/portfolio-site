@@ -8,9 +8,14 @@
     {%- if d.status %}{% if d.lead or not inIndex %}<span class="k">{% if d.lead %}Lead{% elif d.status == "current" %}Current{% else %}Past{% endif %}</span>{% endif %}{% if d.period %}<span>{{ d.period }}</span>{% endif %}
     {%- else %}<span>{{ d.outlet }}{% if d.category %} · {{ d.category }}{% endif %}</span>{% endif -%}
   </p>
-  <h3 class="entry__title"><a href="{{ d.url or entry.url }}">{{ d.title }}</a></h3>
+  <h3 class="entry__title"><a style="view-transition-name: t-{{ entry.page.fileSlug }}" href="{{ d.url or entry.url }}">{{ d.title }}</a></h3>
   {% if d.date %}<p class="entry__meta"><time datetime="{{ d.date | isoDate }}">{{ d.date | displayDate }}</time></p>{% endif %}
   <p class="entry__summary">{{ d.summary or d.deck }}</p>
+  {#- The lead story's figure, as a static picture on the front page only; the
+      working figure itself stays on the entry page (projectplan.md §3). -#}
+  {% if d.lead and page.url == "/" and entry.page.fileSlug == "passagework" %}
+  <a class="lead__fig" href="{{ entry.url }}" tabindex="-1" aria-hidden="true">{{ passageworkPeaks | waveformSvg | safe }}</a>
+  {% endif %}
   {% if d.role %}
   <details class="more"><summary>Details</summary>
     <dl class="facts">

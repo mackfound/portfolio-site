@@ -2,7 +2,7 @@
    the content hash in the dateline; inner pages get a compact masthead and keep
    their own h1. `data-tick` marks the values the front page's tick resolves. #}
 {% set front = page.url == "/" %}
-<header class="masthead{% if not front %} masthead--compact{% endif %}">
+<header style="view-transition-name: masthead" class="masthead{% if not front %} masthead--compact{% endif %}">
   {% if front %}<h1 class="masthead__name">{{ site.name }}</h1>{% else %}<p class="masthead__name"><a href="/">{{ site.name }}</a></p>{% endif %}
   {% if front %}<p class="masthead__standing">Notre Dame · Computer Engineering · Class of 2029</p>{% endif %}
   <p class="dateline">

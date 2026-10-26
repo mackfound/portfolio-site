@@ -86,6 +86,14 @@ These are private to Michael. To update one from a new session, read it by URL, 
   - **Hover lights up only the link,** never the whole entry.
   - The front page shows **2 writing entries**.
 
+- **2026-10-25: "Bland to click through" fixes.** Michael chose, from the second options sampler (https://claude.ai/artifact/H2zGpCMDLzJfzHFHAVNLAt):
+  - **Page transitions,** CSS only. Pages rise in from below; returning home settles in from above.
+  - **Numbered sections and a "Next" strip** on entry pages. No lede; it repeated the summary.
+  - **Lead figure:** a static waveform beside the lead story on wide screens.
+  - **Footer band** with the edition mark.
+  - Rejected: front-page columns and the narrow page.
+  - Next candidates: working figures for RadioHound and remote attestation. Each needs real data and its own review.
+
 ## Open items
 
 - **First live deploy:** Michael runs `./deploy.sh` from a clean, up-to-date main once `check-copy --strict` and `npm test` pass. Then work through the §13 launch checklist.

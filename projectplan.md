@@ -70,6 +70,10 @@ Inter or Geist as the font, a centered giant-headline hero, gradients and blurre
 - **Expand in place:** an entry's facts (role, stack, links) sit in a native `<details>` on lists.
 - **Dateline tick:** on the front page only, the dateline also shows `sha256` plus the first 16 hex digits of `edition.contentHash`. Once on load, the edition number and hash resolve into place, left to right. The final values are in the HTML, so the page is correct with JavaScript off or reduced motion on. This is the site's one ambient motion (section 2).
 - **Working figures:** at most one per entry page, on that page only. Its script and media load on that page alone, and media loads only on interaction. Without JavaScript it shows a static rendering and its caption. Passagework's figure loops the opening 25 s of Brahms, Symphony No. 4, III (Musopen, CC0).
+- **Page transitions (2026-10-25):** cross-document view transitions, CSS only. Pages rise in from below, and the front page settles in from above when you return to it. The masthead and entry titles morph between list and page. They're off under reduced motion, and browsers without support just navigate.
+- **Entry pages (2026-10-25):** sections are numbered (01 Problem…), and a "Next" strip leads to the next entry: projects, then current research, then past research, wrapping around.
+- **Lead figure (2026-10-25):** on the front page, the lead story shows a static picture of its working figure, linking to the entry page. The interactive figure stays on the entry page.
+- **Footer band (2026-10-25):** the page closes on a full-width ink band with `M. Doyle · Vol. V · No. N` and the attestation line.
 - **Randomart:** the signing key's fingerprint drawn as OpenSSH randomart, identical to `ssh-keygen -lv`, rendered at build time. It appears **only on `/verify/`**, beside the fingerprint.
 
 ### Edition numbering
