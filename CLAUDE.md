@@ -103,10 +103,17 @@ These are private to Michael. To update one from a new session, read it by URL, 
   - **Process:** go wide before going deep. Sketch genuinely different directions, not variations on the current one, and don't pick on first viewing. Michael said he takes the first idea too often.
   - **Waiting on Michael:** 2–3 sites that made him stop scrolling, or the closest seed. Don't start sketching before that.
   - **Also raised:** the positioning line reads like resume-speak (his to rewrite), and Notes is built but hidden.
-- **2026-10-25: Contact address.** The site publishes `contact@mdoyle.dev`. That's Cloudflare Email Routing, forwarding to `mdoyle25@nd.edu`; it receives only, and replies come from the nd.edu address unless a sending service is added.
+- **2026-10-25: Contact address.** The site publishes `contact@mdoyle.dev`. That's Cloudflare Email Routing, forwarding to Michael's **personal** address.
+  - It receives only, by choice: replies come from his own address, and no sending service is set up.
+  - Not nd.edu: Notre Dame's mail system silently drops forwarded mail. The activity log said "Forwarded", but nothing arrived, even in spam. A personal address also outlives graduation.
   - `contactLinks.js` writes the address as HTML character references at build time, to stop naive scrapers.
   - **Cloudflare Email Address Obfuscation must stay off.** It rewrote every page carrying the address, injected `/cdn-cgi` JS, and broke the signed hashes; `verify-live` caught it.
   - The resume PDF still shows the nd.edu address. It's Michael's file to update.
+- **2026-10-26: Old address redirect.** A separate classic Pages project, `mdoyle`, owns `mdoyle.pages.dev`, the old site's address that's in 100+ job applications.
+  - Its only content is a `_redirects` rule, `/* https://mdoyle.dev/:splat 301`, plus a fallback `index.html`. It isn't part of the repo or the signed site.
+  - **Never delete it:** the name would be free for anyone to claim.
+  - Recreating it needs `wrangler pages project create mdoyle --production-branch main --force`. Without `--force`, new wrangler creates a Workers project with a `workers.dev` address.
+  - Old-site paths that don't exist on the new site land on the 404 page. Add specific redirects if Michael names any.
 - **2026-10-25: Repo moved** from `~/Desktop/Projects/` (synced by iCloud, which caused hung tests, a git bus error, and failed pushes) to `~/Projects/portfolio-site`. Keep it out of iCloud.
 
 ## Open items
